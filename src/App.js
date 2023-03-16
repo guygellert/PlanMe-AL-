@@ -1,11 +1,9 @@
-import './App.css';
+import ReactRouter from "./components/Router/Router";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      plan meal
-    </div>
-  );
+    <ReactRouter />
+  )
 }
 
-export default App;
+export default App
