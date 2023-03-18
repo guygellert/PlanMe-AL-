@@ -1,11 +1,11 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button, Grid, Stack, TextField, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 
 const Login = () => {
-    const [login, setLogin] = useState({})
+    const [login, setLogin] = useState({ mail: "", password: "" })
 
-    const handleValueChange = (field) => (event) => {
+    const handleValueChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setLogin(prev => ({
             ...prev,
             [field]: event.target.value
@@ -23,12 +23,12 @@ const Login = () => {
                     <Typography variant="h4" align="center">Plan Me(al)</Typography>
                     <TextField
                         label="מייל"
-                        value={login.mail || ""}
+                        value={login.mail}
                         onChange={handleValueChange("mail")}
                     />
                     <TextField
                         label="סיסמה"
-                        value={login.password || ""}
+                        value={login.password}
                         onChange={handleValueChange("password")}
                     />
                     <Button

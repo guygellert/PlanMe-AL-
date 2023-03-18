@@ -1,12 +1,12 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button, Grid, Stack, TextField, Typography } from "@mui/material"
 
 const Registration = () => {
-    const [newUser, setNewUser] = useState({})
+    const [newUser, setNewUser] = useState({ firstName: "", lastName: "", mail: "", password: "" })
     const [loadingSave, setLoadingSave] = useState(false)
     const [saveButton, setSaveButton] = useState({ text: "שמור", color: "primary" })
 
-    const handleValueChange = (field) => (event) => {
+    const handleValueChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser(prev => ({
             ...prev,
             [field]: event.target.value
@@ -24,22 +24,22 @@ const Registration = () => {
                     <Typography variant="h4" align="center">Plan Me(al)</Typography>
                     <TextField
                         label="שם פרטי"
-                        value={newUser.firstName || ""}
+                        value={newUser.firstName}
                         onChange={handleValueChange("firstName")}
                     />
                     <TextField
                         label="שם משפחה"
-                        value={newUser.lastName || ""}
+                        value={newUser.lastName}
                         onChange={handleValueChange("lastName")}
                     />
                     <TextField
                         label="מייל"
-                        value={newUser.mail || ""}
+                        value={newUser.mail}
                         onChange={handleValueChange("mail")}
                     />
                     <TextField
                         label="סיסמה"
-                        value={newUser.password || ""}
+                        value={newUser.password}
                         onChange={handleValueChange("password")}
                     />
                     <Button
