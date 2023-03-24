@@ -1,9 +1,13 @@
 import React, { useState } from "react"
-import { Button, Grid, Stack, TextField, Typography } from "@mui/material"
+import { Alert, Button, Grid, Stack, TextField, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
+import UserServer from "../../serverAPI/user"
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
+    const navigate = useNavigate()
     const [login, setLogin] = useState({ mail: "", password: "" })
+    const [displayAlert, setDisplayAlert] = useState(false)
 
     const handleValueChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setLogin(prev => ({
@@ -12,8 +16,20 @@ const Login = () => {
         }))
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+        try {
+            const user = await UserServer.checkUser(login)
+            console.log(user)
 
+            if (user.data.message === "Wrong email or password") {
+                setDisplayAlert(true)
+            }
+            else if (user.data) {
+                navigate("/home")
+            }
+        } catch {
+
+        }
     }
 
     return (
@@ -41,6 +57,9 @@ const Login = () => {
                         {'אין לך משתמש? '}
                         <Link to="/register" style={{ color: "blue" }}>הירשם כאן</Link>
                     </Typography>
+                    {displayAlert &&
+                        <Alert severity="error">משתמש או סיסמה אינם נכונים</Alert>
+                    }
                 </Stack>
             </Grid>
         </Grid>
