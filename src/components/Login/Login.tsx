@@ -1,19 +1,39 @@
-import { useState } from "react"
-import { Button, Grid, Stack, TextField, Typography } from "@mui/material"
+import React, { useState } from "react"
+import { Alert, Button, Grid, Stack, TextField, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
+import UserServer from "../../serverAPI/user"
+import { useNavigate } from "react-router-dom"
+import { setAuthToken } from "../../auth/auth"
 
 const Login = () => {
-    const [login, setLogin] = useState({})
+    const navigate = useNavigate()
+    const [user, setUser] = useState({ mail: "", password: "" })
+    const [displayAlert, setDisplayAlert] = useState(false)
 
-    const handleValueChange = (field) => (event) => {
-        setLogin(prev => ({
+    const handleValueChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUser(prev => ({
             ...prev,
             [field]: event.target.value
         }))
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+        try {
+            const login = await UserServer.login(user)
 
+            if (login.data.message === "Wrong email or password") {
+                setDisplayAlert(true)
+            }
+            else if (login.data) {
+                const token = login.data.token
+                localStorage.setItem("token", token)
+                setAuthToken(token)
+
+                navigate("/home")
+            }
+        } catch {
+
+        }
     }
 
     return (
@@ -23,12 +43,13 @@ const Login = () => {
                     <Typography variant="h4" align="center">Plan Me(al)</Typography>
                     <TextField
                         label="מייל"
-                        value={login.mail || ""}
+                        value={user.mail}
                         onChange={handleValueChange("mail")}
                     />
                     <TextField
                         label="סיסמה"
-                        value={login.password || ""}
+                        type="password"
+                        value={user.password}
                         onChange={handleValueChange("password")}
                     />
                     <Button
@@ -41,6 +62,9 @@ const Login = () => {
                         {'אין לך משתמש? '}
                         <Link to="/register" style={{ color: "blue" }}>הירשם כאן</Link>
                     </Typography>
+                    {displayAlert &&
+                        <Alert severity="error">משתמש או סיסמה אינם נכונים</Alert>
+                    }
                 </Stack>
             </Grid>
         </Grid>

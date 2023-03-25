@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import App from './App'
 import reportWebVitals from './reportWebVitals';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import createCache from '@emotion/cache';
@@ -19,7 +18,7 @@ const cacheRtl = createCache({
   stylisPlugins: [prefixer, stylisRTLPlugin],
 });
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <CacheProvider value={cacheRtl}>
