@@ -1,0 +1,20 @@
+.SearchBarField{
+    border-radius: 100px;
+}
+.inputRounded .MuiOutlinedInput-root {
+    border-radius: 20px;
+  }
+
+/* .columnSearchBar{
+    display: "flex";
+    align-self: "center";
+    justify-content: "center";
+    flex-direction;: "column",
+    padding: 20
+} */
+.centerForm{
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+    display: flex;
+}
