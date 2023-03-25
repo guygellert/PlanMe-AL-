@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Alert, Button, Grid, Stack, TextField, Typography } from "@mui/material"
 import UserServer from "../../serverAPI/user"
 import { useNavigate } from "react-router-dom"
+import { setAuthToken } from "../../auth/auth"
 
 const Registration = () => {
     const navigate = useNavigate()
@@ -23,6 +24,10 @@ const Registration = () => {
                 setDisplayAlert(true)
             }
             else if (user.data) {
+                const token = user.data.token
+                localStorage.setItem("token", token)
+                setAuthToken(token)
+
                 navigate("/home")
             }
         } catch {

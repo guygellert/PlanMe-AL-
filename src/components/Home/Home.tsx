@@ -1,17 +1,6 @@
-import React, { useEffect } from "react"
-import UserServer from "../../serverAPI/user"
+import React from "react"
 
 const Home = () => {
-    useEffect(() => {
-        const getData = async () => {
-            const users = await UserServer.getData()
-
-            console.log(users)
-        }
-
-        getData()
-    }, [])
-
     return (
         <h1>Home</h1>
     )

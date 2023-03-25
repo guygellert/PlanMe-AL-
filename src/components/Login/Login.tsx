@@ -3,14 +3,15 @@ import { Alert, Button, Grid, Stack, TextField, Typography } from "@mui/material
 import { Link } from "react-router-dom"
 import UserServer from "../../serverAPI/user"
 import { useNavigate } from "react-router-dom"
+import { setAuthToken } from "../../auth/auth"
 
 const Login = () => {
     const navigate = useNavigate()
-    const [login, setLogin] = useState({ mail: "", password: "" })
+    const [user, setUser] = useState({ mail: "", password: "" })
     const [displayAlert, setDisplayAlert] = useState(false)
 
     const handleValueChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLogin(prev => ({
+        setUser(prev => ({
             ...prev,
             [field]: event.target.value
         }))
@@ -18,13 +19,16 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            const user = await UserServer.checkUser(login)
-            console.log(user)
+            const login = await UserServer.login(user)
 
-            if (user.data.message === "Wrong email or password") {
+            if (login.data.message === "Wrong email or password") {
                 setDisplayAlert(true)
             }
-            else if (user.data) {
+            else if (login.data) {
+                const token = login.data.token
+                localStorage.setItem("token", token)
+                setAuthToken(token)
+
                 navigate("/home")
             }
         } catch {
@@ -39,12 +43,13 @@ const Login = () => {
                     <Typography variant="h4" align="center">Plan Me(al)</Typography>
                     <TextField
                         label="מייל"
-                        value={login.mail}
+                        value={user.mail}
                         onChange={handleValueChange("mail")}
                     />
                     <TextField
                         label="סיסמה"
-                        value={login.password}
+                        type="password"
+                        value={user.password}
                         onChange={handleValueChange("password")}
                     />
                     <Button
