@@ -3,15 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "../Login/Login";
 import Registration from "../Login/Registration";
 import SearchMeal from "../Meals/SearchMeal";
-
-// const ProtectedRoute = ({ isAdmin, children }) => {
-//     if (!isAdmin) {
-//         return <Navigate to="/" replace />
-//     }
-
-//     return children
-// }
-
 const ReactRouter = () => {
     return (
         <Router>
@@ -23,5 +14,4 @@ const ReactRouter = () => {
         </Router>
     );
 }
-
-export default ReactRouter
+export default ReactRouter;
