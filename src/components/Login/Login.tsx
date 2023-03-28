@@ -29,7 +29,7 @@ const Login = () => {
                 localStorage.setItem("token", token)
                 setAuthToken(token)
 
-                navigate("/home")
+                navigate("/search")
             }
         } catch {
 

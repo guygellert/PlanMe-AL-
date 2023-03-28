@@ -28,7 +28,7 @@ const Registration = () => {
                 localStorage.setItem("token", token)
                 setAuthToken(token)
 
-                navigate("/home")
+                navigate("/search")
             }
         } catch {
 

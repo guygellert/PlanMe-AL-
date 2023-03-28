@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Home from "../Home/Home";
 import Login from "../Login/Login";
 import Registration from "../Login/Registration";
+import SearchMeal from "../Meals/SearchMeal";
 
 interface RouteProps {
     children: JSX.Element
@@ -22,7 +23,7 @@ const LoginRoute: React.FC<RouteProps> = ({ children }) => {
     const token = localStorage.getItem("token")
 
     if (token) {
-        return <Navigate to="/home" replace />
+        return <Navigate to="/search" replace />
     }
 
     return children
@@ -41,6 +42,11 @@ const ReactRouter = () => {
                 <Route path="/home" element={
                     <ProtectedRoute>
                         <Home />
+                    </ProtectedRoute>
+                } />
+                <Route path="/search" element={
+                    <ProtectedRoute>
+                        <SearchMeal />
                     </ProtectedRoute>
                 } />
             </Routes>
