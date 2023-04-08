@@ -42,12 +42,12 @@ const Login = () => {
                 <Stack direction="column" justifyContent="center" spacing={3}>
                     <Typography variant="h4" align="center">Plan Me(al)</Typography>
                     <TextField
-                        label="מייל"
+                        label="email"
                         value={user.mail}
                         onChange={handleValueChange("mail")}
                     />
                     <TextField
-                        label="סיסמה"
+                        label="password"
                         type="password"
                         value={user.password}
                         onChange={handleValueChange("password")}
@@ -56,14 +56,14 @@ const Login = () => {
                         variant="contained"
                         onClick={handleLogin}
                         sx={{ width: "100%" }}>
-                        התחבר
+                        Login
                     </Button>
                     <Typography align="center">
-                        {'אין לך משתמש? '}
-                        <Link to="/register" style={{ color: "blue" }}>הירשם כאן</Link>
+                        {"Don't have an account? "}
+                        <Link to="/register" style={{ color: "blue" }}>Sign up</Link>
                     </Typography>
                     {displayAlert &&
-                        <Alert severity="error">משתמש או סיסמה אינם נכונים</Alert>
+                        <Alert severity="error">Wrong email or password</Alert>
                     }
                 </Stack>
             </Grid>

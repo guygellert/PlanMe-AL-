@@ -1,13 +1,15 @@
 import React, { useState } from "react"
-import { Alert, Button, Grid, Stack, TextField, Typography } from "@mui/material"
+import { Alert, Button, Grid, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material"
 import UserServer from "../../serverAPI/user"
 import { useNavigate } from "react-router-dom"
 import { setAuthToken } from "../../auth/auth"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 const Registration = () => {
     const navigate = useNavigate()
     const [newUser, setNewUser] = useState({ firstName: "", lastName: "", mail: "", password: "" })
     const [displayAlert, setDisplayAlert] = useState(false)
+    const [displayPassword, setDisplayPassword] = useState(false)
 
     const handleValueChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewUser(prev => ({
@@ -35,39 +37,53 @@ const Registration = () => {
         }
     }
 
+    const handleDisplayPassword = () => {
+        setDisplayPassword(!displayPassword)
+    }
+
     return (
         <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "5em" }}>
             <Grid item xs={4}>
                 <Stack direction="column" spacing={3}>
                     <Typography variant="h4" align="center">Plan Me(al)</Typography>
                     <TextField
-                        label="שם פרטי"
+                        label="First name"
                         value={newUser.firstName}
                         onChange={handleValueChange("firstName")}
                     />
                     <TextField
-                        label="שם משפחה"
+                        label="Last name"
                         value={newUser.lastName}
                         onChange={handleValueChange("lastName")}
                     />
                     <TextField
-                        label="מייל"
+                        label="email"
                         value={newUser.mail}
                         onChange={handleValueChange("mail")}
                     />
                     <TextField
-                        label="סיסמה"
+                        label="password"
+                        type={displayPassword ? "text" : "password"}
                         value={newUser.password}
                         onChange={handleValueChange("password")}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={handleDisplayPassword}>
+                                        {displayPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
                     />
                     <Button
                         variant="contained"
                         onClick={handleSave}
                         sx={{ width: "100%" }}>
-                        הרשמה
+                        Sign up
                     </Button>
                     {displayAlert &&
-                        <Alert severity="error">משתמש זה קיים כבר</Alert>
+                        <Alert severity="error">User already exists</Alert>
                     }
                 </Stack>
             </Grid>
