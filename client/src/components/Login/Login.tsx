@@ -5,7 +5,11 @@ import UserServer from "../../serverAPI/user"
 import { useNavigate } from "react-router-dom"
 import { setAuthToken } from "../../auth/auth"
 
-const Login = () => {
+interface LoginProps {
+    handleToken: (token: string) => void
+}
+
+const Login: React.FC<LoginProps> = ({ handleToken }) => {
     const navigate = useNavigate()
     const [user, setUser] = useState({ mail: "", password: "" })
     const [displayAlert, setDisplayAlert] = useState(false)
@@ -28,6 +32,7 @@ const Login = () => {
                 const token = login.data.token
                 localStorage.setItem("token", token)
                 setAuthToken(token)
+                handleToken(token)
 
                 navigate("/search")
             }

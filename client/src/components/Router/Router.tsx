@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "../Home/Home";
 import Login from "../Login/Login";
 import Registration from "../Login/Registration";
 import SearchMeal from "../Meals/SearchMeal";
+import Navbar from "./Navbar";
 
 interface RouteProps {
     children: JSX.Element
@@ -30,15 +31,22 @@ const LoginRoute: React.FC<RouteProps> = ({ children }) => {
 }
 
 const ReactRouter = () => {
+    const [token, setToken] = useState<string>()
+
+    const handleToken = (token: string) => {
+        setToken(token)
+    }
+
     return (
         <Router>
+            {token && <Navbar />}
             <Routes>
                 <Route path="/" element={
                     <LoginRoute>
-                        <Login />
+                        <Login handleToken={handleToken} />
                     </LoginRoute>
                 } />
-                <Route path="/register" element={<Registration />} />
+                <Route path="/register" element={<Registration handleToken={handleToken} />} />
                 <Route path="/home" element={
                     <ProtectedRoute>
                         <Home />

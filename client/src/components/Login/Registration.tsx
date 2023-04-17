@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom"
 import { setAuthToken } from "../../auth/auth"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 
-const Registration = () => {
+interface RegistrationProps {
+    handleToken: (token: string) => void
+}
+
+const Registration: React.FC<RegistrationProps> = ({ handleToken }) => {
     const navigate = useNavigate()
     const [newUser, setNewUser] = useState({ firstName: "", lastName: "", mail: "", password: "" })
     const [displayAlert, setDisplayAlert] = useState(false)
@@ -29,6 +33,7 @@ const Registration = () => {
                 const token = user.data.token
                 localStorage.setItem("token", token)
                 setAuthToken(token)
+                handleToken(token)
 
                 navigate("/search")
             }
