@@ -1,4 +1,4 @@
-import { User } from '../src/entity/User';
+import { User } from '../src/entities/User';
 import {initializeDB,teardown} from '../src/setup';
 import AppDataSource from './ormconfig';
 
