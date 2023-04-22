@@ -15,7 +15,7 @@ const AppDataSource = new DataSource({
   username: connectionOptions.user,
   password: connectionOptions.password,
   database: `${connectionOptions.database}`,
-  synchronize: true, //Think TWICE
+  synchronize: false, //Think TWICE
   logging: false,
   entities: entities,
   migrations: ["src/migration/**/*.ts"],
