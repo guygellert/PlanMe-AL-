@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm"
 import dotenv from "dotenv"
 import connectionParser from "pg-connection-string"
-import { User } from "../src/entity/User"
+import * as entities from '../src/entities'
 
 dotenv.config()
 
@@ -15,9 +15,9 @@ const AppDataSource = new DataSource({
   username: connectionOptions.user,
   password: connectionOptions.password,
   database: `${connectionOptions.database}`,
-  synchronize: false, //Think TWICE
+  synchronize: true, //Think TWICE
   logging: false,
-  entities: [User], //["src/entity/*.ts"],
+  entities: entities,
   migrations: ["src/migration/**/*.ts"],
   subscribers: ["src/subscriber/**/*.ts"],
 })

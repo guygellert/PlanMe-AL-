@@ -1,7 +1,7 @@
 import AppDataSource from "../../../config/ormconfig"
 import { Request, Response } from "express"
 import httpStatus from "http-status"
-import { User } from "../../entity/User"
+import { User } from "../../entities/User"
 import Service from "./service"
 import bcrypt from "bcrypt"
 import { generateAccessToken, generateRefreshToken } from "../../auth/tokensFuncs"
