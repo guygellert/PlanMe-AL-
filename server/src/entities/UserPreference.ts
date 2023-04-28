@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from 'typeorm/repository/BaseEntity';
-import { Cousine } from './Cousine';
+import { Cuisine } from './Cuisine';
 import { DishCategory } from './DishCategory';
 import { MealCategory } from './MealCategory';
 import { User } from './User';
@@ -13,9 +13,9 @@ export class UserPreference extends BaseEntity {
     @OneToOne(() => User)
     User: User;
 
-    @ManyToMany(() => Cousine)
+    @ManyToMany(() => Cuisine)
     @JoinTable()
-    cousines: Cousine[];
+    cuisines: Cuisine[];
   
     @ManyToMany(() => DishCategory)
     @JoinTable()
