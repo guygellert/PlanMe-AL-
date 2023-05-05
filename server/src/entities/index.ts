@@ -1,4 +1,4 @@
-export * from './Cousine'
+export * from './Cuisine'
 export * from './Dish'
 export * from './DishCategory'
 export * from './Meal'
