@@ -16,9 +16,7 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
     }
 
     return (
-        <Card sx={{ marginTop: "1em", 
-        // height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" 
-        }}>
+        <Card sx={{ marginTop: "1em" }}>
             <CardHeader
                 action={
                     <IconButton>

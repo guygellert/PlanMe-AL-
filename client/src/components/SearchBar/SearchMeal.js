@@ -25,6 +25,7 @@ const SearchMeal = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const dataFiltered = Filter.filterData(searchQuery, meals, ["name"]);
+
   return (
     <div
       style={{
