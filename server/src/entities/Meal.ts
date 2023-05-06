@@ -8,6 +8,9 @@ export class Meal extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({default: 0})
+    rating: number
+
     @ManyToOne(() => Dish)
     mainDish: Dish;
 

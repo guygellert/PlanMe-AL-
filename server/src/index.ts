@@ -30,7 +30,7 @@ app.use("/refresh_token", refreshToken)
 
 initializeDB();
 
-app.use('/', authenticate, router)
+app.use('/', router)
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
