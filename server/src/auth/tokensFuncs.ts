@@ -27,7 +27,6 @@ export const userPassportMiddleware =  (
       if(err || !user){
         res.status(401).json({error:'Invalid user token', err});
       } else {
-        console.log(user)
         req.user = user;
         next()
       }
