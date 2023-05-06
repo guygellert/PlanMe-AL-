@@ -1,6 +1,10 @@
-import React from "react"
+import axios from "axios"
+import React, { useEffect } from "react"
 
 const Home = () => {
+    useEffect(() => {
+        axios.get('/top-meal');
+    },[]);
     return (
         <h1>Home</h1>
     )

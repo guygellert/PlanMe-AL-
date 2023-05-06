@@ -1,11 +1,47 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { User } from "../entities/User"
 import jwt, { verify } from "jsonwebtoken"
+import { ExtractJwt,Strategy  } from "passport-jwt";
+import { UserData } from "../utils/types";
+import passport from "passport";
+
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env['ACCESS_SECRET'],
+}
+
+export const JwtStrategy = new Strategy(jwtOptions,async ({email, password},done) => {
+  const loggedUser = await User.findOneBy({mail: email,password: password})
+  if(!loggedUser){
+      return done(new Error('No user found in token'), false);
+  }
+
+  return done(null,{id: loggedUser.id});
+})
+
+export const userPassportMiddleware =  (
+  req: Request<any, any, any, any>,
+  res: Response,
+  next: NextFunction) => {
+    passport.authenticate(['userJwt'], { session: false }, async (err:any, user: UserData) => {
+      if(err || !user){
+        res.status(401).json({error:'Invalid user token', err});
+      } else {
+        console.log(user)
+        req.user = user;
+        next()
+      }
+    })(req,res,next);
+  };
 
 export const generateAccessToken = (user: User) => {
   const { id } = user;
   const accessToken = jwt.sign(
-    { id: id },
+    { 
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.mail
+    },
     process.env.ACCESS_SECRET,
     { expiresIn: "5m" }
   );
