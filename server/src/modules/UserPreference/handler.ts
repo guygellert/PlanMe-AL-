@@ -1,14 +1,14 @@
 import AppDataSource from "../../../config/ormconfig"
 import { Request, Response } from "express"
 import httpStatus from "http-status"
-import { Cuisine } from "../../entity/Cuisine"
-import { DishCategory } from "../../entity/DishCategory"
-import { MealCategory } from "../../entity/MealCategory"
-import { User } from "../../entity/User"
+import { Cuisine } from "../../entities/Cuisine"
+import { DishCategory } from "../../entities/DishCategory"
+import { MealCategory } from "../../entities/MealCategory"
+import { User } from "../../entities/User"
 import Service from "./service"
 import bcrypt from "bcrypt"
 import { generateAccessToken, generateRefreshToken } from "../../auth/tokensFuncs"
-import { UserPreference } from "../../entity/UserPreference"
+import { UserPreference } from "../../entities/UserPreference"
 
 export const updateUserPreference = async (req: Request, res: Response) => {
     try {

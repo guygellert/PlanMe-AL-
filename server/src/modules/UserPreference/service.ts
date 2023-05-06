@@ -1,9 +1,9 @@
 import AppDataSource from "../../../config/ormconfig"
-import { UserPreference } from "../../entity/UserPreference"
-import { Cuisine } from "../../entity/Cuisine"
-import { DishCategory } from "../../entity/DishCategory"
-import { MealCategory } from "../../entity/MealCategory"
-import { User } from "../../entity/User"
+import { UserPreference } from "../../entities/UserPreference"
+import { Cuisine } from "../../entities/Cuisine"
+import { DishCategory } from "../../entities/DishCategory"
+import { MealCategory } from "../../entities/MealCategory"
+import { User } from "../../entities/User"
 export interface UserPreferenceInput {
     id:User,
     cuisine: Cuisine[],

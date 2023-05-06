@@ -1,7 +1,7 @@
 import AppDataSource from "../../../config/ormconfig"
 import { Request, Response } from "express"
 import httpStatus from "http-status"
-import { DishCategory } from "../../entity/DishCategory"
+import { DishCategory } from "../../entities/DishCategory"
 import Service from "./service"
 export const createDishCategory = async (req: Request, res: Response) => {
     try {

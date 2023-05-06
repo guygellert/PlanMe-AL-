@@ -1,7 +1,7 @@
 import AppDataSource from "../../../config/ormconfig"
 import { Request, Response } from "express"
 import httpStatus from "http-status"
-import { Cuisine } from "../../entity/Cuisine"
+import { Cuisine } from "../../entities/Cuisine"
 import Service from "./service"
 export const createCuisine = async (req: Request, res: Response) => {
     try {

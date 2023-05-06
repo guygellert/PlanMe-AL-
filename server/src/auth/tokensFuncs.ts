@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { User } from "../entity/User"
+import { User } from "../entities/User"
 import jwt, { verify } from "jsonwebtoken"
 
 export const generateAccessToken = (user: User) => {

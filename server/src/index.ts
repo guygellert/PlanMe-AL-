@@ -8,6 +8,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import { authenticate } from "./middlewares/auth"
 import { refreshToken } from "./auth/tokensFuncs"
+import { initializeDB } from "./setup"
 
 dotenv.config()
 
@@ -27,14 +28,8 @@ app.use(express.json())
 app.use("/login", login)
 app.use("/register", createUser)
 app.use("/refresh_token", refreshToken)
-// app.use("/cuisine", getAllCuisine)
-AppDataSource.initialize()
-  .then(() => {
-    console.log('Connected to database');
-  })
-  .catch((error) => {
-    console.log('Error connecting to database:', error);
-  });
+
+initializeDB();
 
 app.use('/', authenticate, router)
 

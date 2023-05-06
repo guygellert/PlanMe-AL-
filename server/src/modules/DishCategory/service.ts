@@ -1,5 +1,5 @@
 import AppDataSource from "../../../config/ormconfig"
-import { DishCategory } from "../../entity/DishCategory"
+import { DishCategory } from "../../entities/DishCategory"
 
 export interface DishCategoryInput {
     description: string,

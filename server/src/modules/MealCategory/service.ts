@@ -1,5 +1,5 @@
 import AppDataSource from "../../../config/ormconfig"
-import { MealCategory } from "../../entity/MealCategory"
+import { MealCategory } from "../../entities/MealCategory"
 
 export interface MealCategoryInput {
     description: string,

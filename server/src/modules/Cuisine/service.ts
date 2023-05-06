@@ -1,5 +1,5 @@
 import AppDataSource from "../../../config/ormconfig"
-import { Cuisine } from "../../entity/Cuisine"
+import { Cuisine } from "../../entities/Cuisine"
 
 export interface CuisineInput {
     description: string,
