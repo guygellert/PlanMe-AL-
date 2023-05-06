@@ -4,6 +4,7 @@ import Home from "../Home/Home";
 import Login from "../Login/Login";
 import Registration from "../Login/Registration";
 import SearchMeal from "../Meals/SearchMeal";
+import Preffernce from "../Preffernce/Preffernce";
 import Navbar from "./Navbar";
 
 interface RouteProps {
@@ -56,6 +57,11 @@ const ReactRouter = () => {
                     <ProtectedRoute>
                         <SearchMeal />
                     </ProtectedRoute>
+                } />
+                                <Route path="/pref" element={
+                    // <ProtectedRoute>
+                        <Preffernce />
+                    // </ProtectedRoute>
                 } />
             </Routes>
         </Router>

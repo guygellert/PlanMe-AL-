@@ -4,7 +4,7 @@ import httpStatus from "http-status"
 
 export const authenticate = (req: Request, res: Response, next: any) => {
     const token = req.headers.authorization?.split(" ")[1]
-
+    console.log(token)
     if (token == null)
         return res.status(httpStatus.UNAUTHORIZED).send()
 

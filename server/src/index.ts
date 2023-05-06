@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import AppDataSource from "../config/ormconfig"
 import router from "./routes/index"
 import { createUser, login } from "./modules/User/handler"
+import { getAllCuisine } from "./modules/Cuisine/handler"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import { authenticate } from "./middlewares/auth"
@@ -26,7 +27,7 @@ app.use(express.json())
 app.use("/login", login)
 app.use("/register", createUser)
 app.use("/refresh_token", refreshToken)
-
+// app.use("/cuisine", getAllCuisine)
 AppDataSource.initialize()
   .then(() => {
     console.log('Connected to database');
