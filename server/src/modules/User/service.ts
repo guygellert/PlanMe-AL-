@@ -1,6 +1,6 @@
 import AppDataSource from "../../../config/ormconfig"
 import bcrypt from "bcrypt"
-import { User } from "../../entity/User"
+import { User } from "../../entities/User"
 
 export interface UserInput {
     firstName: string,

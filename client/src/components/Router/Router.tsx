@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Home from "../Home/Home";
 import Login from "../Login/Login";
 import Registration from "../Login/Registration";
-import SearchMeal from "../Meals/SearchMeal";
+import Preffernce from "../Preffernce/Preffernce";
+import SearchMeal from "../SearchBar/SearchMeal";
 import Navbar from "./Navbar";
 import Profile from "../Profile/Profile";
 
@@ -62,6 +63,11 @@ const ReactRouter = () => {
                     <ProtectedRoute>
                         <Profile />
                     </ProtectedRoute>
+                } />
+                <Route path="/pref" element={
+                    // <ProtectedRoute>
+                        <Preffernce />
+                    // </ProtectedRoute>
                 } />
             </Routes>
         </Router>

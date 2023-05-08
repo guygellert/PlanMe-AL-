@@ -18,6 +18,10 @@ const Navbar = () => {
         {
             path: "/favoriteMeals",
             text: "Favorites"
+        },
+        {
+            path: "/pref",
+            text: "Preffernce"
         }
     ]
 

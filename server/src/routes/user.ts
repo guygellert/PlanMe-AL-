@@ -6,4 +6,6 @@ router.post('/', async (req: Request, res: Response) => {
     return createUser(req, res)
 })
 
+
+
 export default router
