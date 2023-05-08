@@ -29,14 +29,9 @@
     "pg": "^8.10.0",
     "pg-connection-string": "^2.5.0",
     "typeorm": "^0.3.12",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.2"
   },
   "devDependencies": {
     "@types/passport-jwt": "^3.0.8"
-  },
-  "overrides": {
-    "react-scripts": {
-      "typescript": "^5"
-    }
   }
 }

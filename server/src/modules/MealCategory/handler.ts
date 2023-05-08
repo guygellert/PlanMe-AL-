@@ -25,7 +25,7 @@ export const createMealCategory = async (req: Request, res: Response) => {
 
 export const getAllMealCategory = async (req: Request, res: Response) => {
     try {
-        const mealCategory = await AppDataSource.getRepository(MealCategory).find();
+        const mealCategory: MealCategory[] = await AppDataSource.getRepository(MealCategory).find();
         return res.status(httpStatus.OK).send({ mealCategory: mealCategory });
     } catch (err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err)

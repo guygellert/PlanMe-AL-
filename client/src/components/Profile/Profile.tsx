@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Chip, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
+import MealCategoryServer from "../../serverAPI/mealCategory";
+import { Meal } from "../../models/Meal";
 
 const Profile: React.FC = (): JSX.Element => {
     const [categories, setCategories] = useState<string[]>(['Asian', 'Italian']);
+    const [mealCategories, setMealCategories] = useState<Meal[]>([]);
+
+    useEffect(() => {
+        MealCategoryServer.getMealCategory().then((mealCategoriesData: Meal[]) =>{
+            if(Array.isArray(mealCategoriesData)){
+              setMealCategories(mealCategoriesData);
+            }
+          });
+    },[])
+
+      console.log(mealCategories);
+
     return (
-        <Container sx={{ bgcolor: '#cfe8fc', height: '100vh', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
+        <Container sx={{ bgcolor: '#cfe8fc', height: '95vh', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
             <Box
                 component="img"
                 sx={{
-                height: 233,
+                height: 200,
                 width: 350,
                 margin: 5
                 // maxHeight: { xs: 233, md: 167 },
@@ -30,14 +44,20 @@ const Profile: React.FC = (): JSX.Element => {
             </div>
             <Typography sx={{ fontSize: 15, fontFamily: "sans-serif", margin: 5}}>Allergies: None</Typography>
             <FormControl>
-                <FormLabel>Preferences</FormLabel>
-                <RadioGroup
-                    row
-                    value={'Yes'}
-                >
-                    <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                    <FormControlLabel value="No" control={<Radio />} label="No" />
-                </RadioGroup>
+                {mealCategories && mealCategories.map((mealCategory: Meal) => 
+                <div key={mealCategory.id}>
+                    <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
+                    <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        defaultValue="no"
+                    >
+                        <FormControlLabel value="no" control={<Radio />} label="No" />
+                        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                    </RadioGroup>
+                </div>
+                    )}
             </FormControl>
         </Container>
     )
