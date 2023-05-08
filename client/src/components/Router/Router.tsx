@@ -5,6 +5,7 @@ import Login from "../Login/Login";
 import Registration from "../Login/Registration";
 import SearchMeal from "../Meals/SearchMeal";
 import Navbar from "./Navbar";
+import Profile from "../Profile/Profile";
 
 interface RouteProps {
     children: JSX.Element
@@ -55,6 +56,11 @@ const ReactRouter = () => {
                 <Route path="/search" element={
                     <ProtectedRoute>
                         <SearchMeal />
+                    </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                    <ProtectedRoute>
+                        <Profile />
                     </ProtectedRoute>
                 } />
             </Routes>
