@@ -5,11 +5,14 @@ import cuisineServer from "../../serverAPI/cuisine"
 import mealCategoryServer from "../../serverAPI/mealCategory"
 import dishCategoryServer from "../../serverAPI/dishCategory"
 import UserPreferenceServer from "../../serverAPI/userPreference"
+import { Cuisine } from "../../models/Cuisine"
+import { Meal } from "../../models/Meal"
+import { DishCategory } from "../../models/DishCategory"
 const Preffernce = () => {
   
-  const [cuisines, setCuisines] = useState([]);
-  const [mealCategories, setMealCategories] = useState([]);
-  const [dishCategories, setDishCategories] = useState([]);
+  const [cuisines, setCuisines] = useState<Cuisine[]>([]);
+  const [mealCategories, setMealCategories] = useState<Meal[]>([]);
+  const [dishCategories, setDishCategories] = useState<DishCategory[]>([]);
   useEffect(() => {
     cuisineServer.getCuisines().then((cuisinesData) =>{
       if(Array.isArray(cuisinesData)){
@@ -96,4 +99,4 @@ const handleSave = async () => {
     )
 }
 
-export default Preffernce
+export default Preffernce;
