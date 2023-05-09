@@ -31,6 +31,7 @@ const Login: React.FC<LoginProps> = ({ handleToken }) => {
             else if (login.data) {
                 const token = login.data.token
                 localStorage.setItem("token", token)
+                localStorage.setItem("email", user.mail)
                 setAuthToken(token)
                 handleToken(token)
 

@@ -10,6 +10,7 @@ const Preffernce = () => {
   const [cuisines, setCuisines] = useState([]);
   const [mealCategories, setMealCategories] = useState([]);
   const [dishCategories, setDishCategories] = useState([]);
+  const [userPreffernce, setUserPreffernce] = useState({User:{"email":localStorage.email},cuisines: [], dishCategories:[],mealCategories:[]})
   useEffect(() => {
     cuisineServer.getCuisines().then((cuisinesData) =>{
       if(Array.isArray(cuisinesData)){
@@ -29,13 +30,72 @@ const Preffernce = () => {
     
   })
 
-  UserPreferenceServer.getUserPreference().then((UserPreferenceData) => {
+  UserPreferenceServer.getUserPreference(userPreffernce).then((UserPreferenceData) => {
     console.log(UserPreferenceData)
+    setUserPreffernce(UserPreferenceData)
+
   })
    
-}, []);       
+}, []);
+const handleValueChange = (field: string,ind:string = "I") => (event: React.ChangeEvent<HTMLInputElement>,value) => {
+  event.preventDefault();
+  let fieldValue = userPreffernce[field];
+  switch (field){
+    case 'cuisines' || 'dishCategories':
+    {
+      fieldValue = value;
+      // fieldValue.push(event.target.value);
+      break;
+    }
+    case 'mealCategories':{
+      fieldValue = [... fieldValue];
+      if(value.length)
+      {
+        let mealCat = mealCategories.find((mea) =>{
+          if(mea.id == value)
+          {
+            return mea;
+          }
+        })
+      fieldValue.push(mealCat);
+      }
+      else
+      {
+        fieldValue = fieldValue.filter((fValue) => {return fValue.id != value;});
+      }
+      break;
+    }
+    default:
+    {
+      fieldValue = value;
+      break;
+    }
+  }
+  setUserPreffernce(prev => ({
+      ...prev,
+      [field]: fieldValue
+  }))
+}       
 const handleSave = async () => {
 
+  UserPreferenceServer.updateUserPreference(userPreffernce);
+
+}
+
+const returnValue = (idFind) => 
+{
+  let mealCat;
+    mealCat = userPreffernce.mealCategories.find((PrefMealCat) =>{
+      if(PrefMealCat.id == idFind)
+      {
+        return PrefMealCat.id
+      }
+    });
+    if(mealCat){
+      return mealCat.id;
+    }
+    return "";
+  
 }
     return (
         <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "7em" }}>
@@ -49,6 +109,8 @@ const handleSave = async () => {
         options={cuisines}
         getOptionLabel={(option) => option.description}
         filterSelectedOptions
+        value={userPreffernce.cuisines}
+        onChange={handleValueChange("cuisines")}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -60,6 +122,8 @@ const handleSave = async () => {
         multiple
         id="tags-outlined"
         options={dishCategories}
+        value={userPreffernce.dishCategories}
+        onChange={handleValueChange("dishCategories")}
         getOptionLabel={(option) => option.description}
         filterSelectedOptions
         renderInput={(params) => (
@@ -78,10 +142,13 @@ const handleSave = async () => {
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
-        defaultValue="no"
+        onChange={handleValueChange("mealCategories")}
+        value={returnValue(mealCategory.id)}
+        // userPreffernce.mealCategories[mealCategory.id]}
+        // defaultValue={mealCategory.id}
       >
-        <FormControlLabel value="no" control={<Radio />} label="No" />
-        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+        <FormControlLabel value=""  control={<Radio />} label="No" />
+        <FormControlLabel  value={mealCategory.id}  control={<Radio />} label="Yes" />
       </RadioGroup>
       </div>
           )}

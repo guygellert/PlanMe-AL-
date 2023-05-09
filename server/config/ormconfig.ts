@@ -6,6 +6,7 @@ import * as entities from '../src/entities'
 dotenv.config()
 var str: string = `${process.env.POSTGRESQLCONNSTR_pgconnection}`
 const connectionOptions = connectionParser.parse(str)
+console.log(connectionOptions.password)
 const AppDataSource = new DataSource({
   type: "postgres",
   host: `${connectionOptions.host}`,

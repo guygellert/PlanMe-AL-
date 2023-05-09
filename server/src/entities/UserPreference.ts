@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column,PrimaryColumn, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from 'typeorm/repository/BaseEntity';
 import { Cuisine } from './Cuisine';
 import { DishCategory } from './DishCategory';
@@ -7,11 +7,11 @@ import { User } from './User';
 
 @Entity()
 export class UserPreference extends BaseEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: number;
-    
-    @OneToOne(() => User)
-    User: User;
+    // @PrimaryColumn()
+    // @OneToOne(() => User)
+    // User: number;
 
     @ManyToMany(() => Cuisine)
     @JoinTable()
