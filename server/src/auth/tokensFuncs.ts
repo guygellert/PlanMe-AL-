@@ -35,6 +35,7 @@ export const userPassportMiddleware =  (
 
 export const generateAccessToken = (user: User) => {
   const { id } = user;
+  console.log(user)
   const accessToken = jwt.sign(
     { 
       firstName: user.firstName,
@@ -44,7 +45,7 @@ export const generateAccessToken = (user: User) => {
     process.env.ACCESS_SECRET,
     { expiresIn: "5m" }
   );
-
+  // localStorage.setItem("mail",user.mail);
   return accessToken;
 };
 

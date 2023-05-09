@@ -32,6 +32,7 @@ const Registration: React.FC<RegistrationProps> = ({ handleToken }) => {
             else if (user.data) {
                 const token = user.data.token
                 localStorage.setItem("token", token)
+                localStorage.setItem("email", user.mail)
                 setAuthToken(token)
                 handleToken(token)
 

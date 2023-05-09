@@ -5,7 +5,7 @@ import { DishCategory } from "../../entities/DishCategory"
 import { MealCategory } from "../../entities/MealCategory"
 import { User } from "../../entities/User"
 export interface UserPreferenceInput {
-    id:User,
+    User:User,
     cuisine: Cuisine[],
     dishCategory:DishCategory[],
     mealCategory:MealCategory[]
