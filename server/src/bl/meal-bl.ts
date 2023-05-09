@@ -22,3 +22,8 @@ export const getMealById = (id: number) => (
     .andWhere({id})
     .getOne()
 )
+export const getMealBySearch = (description: String) => (
+    mealBaseQuery()
+    .andWhere({})
+    .getOne()
+)

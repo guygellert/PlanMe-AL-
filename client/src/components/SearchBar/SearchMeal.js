@@ -24,7 +24,7 @@ const SearchMeal = () => {
   ]
 
   const [searchQuery, setSearchQuery] = useState("");
-  const dataFiltered = Filter.filterData(searchQuery, meals, ["name"]);
+  const dataFiltered = Filter.filterData(searchQuery, meals,["mainDish","sideDish"], ["name"]);
 
   return (
     <div

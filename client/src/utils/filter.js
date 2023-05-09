@@ -1,16 +1,20 @@
 
-const filterData = (query, data,fields) => {
+const filterData = (query, data,firstFields,secondaryFields) => {
     let dataFiltered = data;
     let filterFieldData = [];
     if (!query) {
       return dataFiltered;
     } else {
         dataFiltered = [];
-        fields.forEach(field => 
+        firstFields.forEach(field => 
             {
-                filterFieldData = [];
-                filterFieldData = data.filter((d) => d[field].toLowerCase().includes(query.toLowerCase()));
-                dataFiltered.push(...filterFieldData);
+                secondaryFields.forEach(fieldSecond => 
+                {
+                  filterFieldData = [];
+                  filterFieldData = data.filter((d) => d[field][fieldSecond].toLowerCase().includes(query.toLowerCase()));
+                  dataFiltered.push(...filterFieldData);
+                })
+
             });
         return dataFiltered;
             
