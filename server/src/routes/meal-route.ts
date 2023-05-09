@@ -1,12 +1,24 @@
 import AppDataSource from '../../config/ormconfig';
 import { Router } from "express";
-import { getTopMeals, getMealById } from '../bl/meal-bl';
+import { getTopMeals, getMealById,getMealBySearch } from '../bl/meal-bl';
 
 const mealRouter = Router();
 
 mealRouter.get('/:id', async (req, resp) => {
     const { id } = req.params;
     const meal = await getMealById(parseInt(id));
+
+    if(!meal){
+        resp.status(404).json({message: 'Meal not found'});
+    } else {
+        resp.json({meal});
+    }
+})
+
+
+mealRouter.get('/:desc', async (req, resp) => {
+    const { desc } = req.params;
+    const meal = await getMealBySearch(desc);
 
     if(!meal){
         resp.status(404).json({message: 'Meal not found'});
