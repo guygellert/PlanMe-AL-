@@ -7,8 +7,9 @@ import { getAllCuisine } from "./modules/Cuisine/handler"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import { authenticate } from "./middlewares/auth"
-import { refreshToken } from "./auth/tokensFuncs"
+import { JwtStrategy, refreshToken } from "./auth/tokensFuncs"
 import { initializeDB } from "./setup"
+import passport from "passport"
 
 dotenv.config()
 
@@ -25,13 +26,15 @@ app.use(
 
 app.use(express.json())
 
+passport.initialize()
+passport.use('userJwt', JwtStrategy)
 app.use("/login", login)
 app.use("/register", createUser)
 app.use("/refresh_token", refreshToken)
 
 initializeDB();
 
-app.use('/', authenticate, router)
+app.use('/', router)
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)

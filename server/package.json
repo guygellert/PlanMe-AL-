@@ -24,9 +24,14 @@
     "http-status": "^1.6.2",
     "jsonwebtoken": "^9.0.0",
     "nodemon": "^2.0.21",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.10.0",
     "pg-connection-string": "^2.5.0",
     "typeorm": "^0.3.12",
     "typescript": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/passport-jwt": "^3.0.8"
   }
 }
