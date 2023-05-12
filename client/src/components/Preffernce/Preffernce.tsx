@@ -35,7 +35,6 @@ const Preffernce = () => {
   })
 
   UserPreferenceServer.getUserPreference(userPreffernce).then((UserPreferenceData) => {
-    console.log(UserPreferenceData)
     setUserPreffernce(UserPreferenceData)
 
   })

@@ -8,7 +8,6 @@ export default class UserPreferenceServer {
     }
 
     static getUserPreference(UserPreference) {
-        console.log(UserPreference)
         const queryParams = {user: UserPreference.User.email};
         const params = new URLSearchParams(queryParams)
         return axios.get("/userPreference", { params: params})

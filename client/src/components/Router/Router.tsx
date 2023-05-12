@@ -33,7 +33,7 @@ const LoginRoute: React.FC<RouteProps> = ({ children }) => {
 }
 
 const ReactRouter = () => {
-    const [token, setToken] = useState<string>()
+    const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
 
     const handleToken = (token: string) => {
         setToken(token)
