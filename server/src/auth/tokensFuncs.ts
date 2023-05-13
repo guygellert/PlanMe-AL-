@@ -44,7 +44,7 @@ export const generateAccessToken = (user: User) => {
     process.env.ACCESS_SECRET,
     { expiresIn: "5m" }
   );
-  // localStorage.setItem("mail",user.mail);
+  
   return accessToken;
 };
 
