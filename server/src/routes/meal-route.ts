@@ -32,8 +32,11 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
     const { desc } = req.params;
     let doc = nlp(desc);
     let input = doc.nouns().toSingular().out('text');
-    console.log(input)
-    let listOfPossible = input.split(" ");
+    let inputPronuns = doc.pronouns().out('text');
+    console.log(input);
+    let listOfPossible:Array<String> = input.split(" ");
+    let listOfPronouns:Array<String> = inputPronuns.split(" ")
+    listOfPossible = listOfPossible.filter((el:String) => listOfPronouns.includes(el));
     let listMatch:any[][] = [];
     let mealService:MealService = new MealService();
     let mealList =[];
