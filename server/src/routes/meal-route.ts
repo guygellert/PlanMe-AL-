@@ -50,6 +50,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
         
         console.log(mealList)
     }
+    resp.json({mealList});
 })
 
 
