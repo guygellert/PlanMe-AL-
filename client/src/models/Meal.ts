@@ -1,4 +1,8 @@
+import { Dish } from "./Dish";
+
 export interface Meal {
     id: number;
-    description: string;
+    mainDish: Dish;
+    sideDish: Dish;
+    rating: number;
 }
