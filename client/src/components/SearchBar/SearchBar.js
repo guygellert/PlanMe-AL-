@@ -3,7 +3,12 @@ import {Search} from '@mui/icons-material';
 import {TextField,IconButton,Autocomplete} from "@mui/material";
 import SpeechButton from './SpeechButton'
 import classes from "./SearchBar.module.css";
-const SearchBar = ({searchQuery,setSearchQuery}) => { 
+import MealServer from "../../serverAPI/meal";
+const SearchBar = ({searchQuery,setSearchQuery, extentiveSearch}) => { 
+  // const extentiveSearch = () => 
+  // {
+  //   MealServer.getMealBySearch(searchQuery);
+  // }
     return (
     <form className={classes.centerForm}>
     <div className={classes.inputRounded}>
@@ -19,7 +24,7 @@ const SearchBar = ({searchQuery,setSearchQuery}) => {
         value={searchQuery}
       />
       </div>
-      <IconButton type="submit" aria-label="search">
+      <IconButton onClick={extentiveSearch} type="submit" aria-label="search">
         <Search style={{ fill: "blue" }} />
       </IconButton>
       <SpeechButton setSearchQuery={setSearchQuery}></SpeechButton>

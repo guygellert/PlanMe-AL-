@@ -1,5 +1,6 @@
 import { Meal, UserMeal, UserPreference } from "../../src/entities";
 import AppDataSource from "../../config/ormconfig"
+import nlp from "compromise"
 
 const mealBaseQuery = () => (
     AppDataSource.getRepository(Meal)
@@ -21,11 +22,12 @@ export const getMealById = (id: number) => (
         .getOne()
 )
 
-export const getMealBySearch = (description: String) => (
+export const getMealBySearch = (description: string) => (
     mealBaseQuery()
-        .andWhere({})
-        .getOne()
-)
+    .orWhere('mainDish.description = :description',{description})
+    // .orWhere('sideDish.description = :description',{description})
+    .getMany()
+);
 
 const userPreference = (userId: number) => (
     AppDataSource.getRepository(UserPreference)
@@ -72,4 +74,3 @@ const userMeals = (userId: number) => (
     .where("user.id = :userId", { userId })
     .getMany()
 )
-
