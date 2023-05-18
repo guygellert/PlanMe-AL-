@@ -1,7 +1,7 @@
 import AppDataSource from '../../config/ormconfig';
 import { Router } from "express";
 import nlp from "compromise"
-import { getTopMeals, getMealById, getMealBySearch, getMealsByUserPreference } from '../bl/meal-bl';
+import { getTopMeals, getMealById, getMealBySearch } from '../bl/meal-bl';
 import MealService from "../modules/Meal/service";
 const mealRouter = Router();
 
@@ -13,11 +13,6 @@ mealRouter.get('/', async (req, resp) => {
     } else {
         resp.json({meal});
     }
-})
-
-mealRouter.get('/userPref', async (req, resp) => {
-    const meals = await getMealsByUserPreference(2)
-    resp.json({ meals });
 })
 
 mealRouter.get('/filterById/:id', async (req, resp) => {
@@ -50,7 +45,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
         let description = listMatch[i].join(" ");
         console.log(description)
         if(description.length > 0){
-        const meal = await getMealBySearch(description)
+        const meal = await getMealBySearch(req.user.id, description)
         mealList.push(meal);
         }
         

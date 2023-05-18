@@ -1,6 +1,7 @@
 import { Meal, UserMeal, UserPreference } from "../../src/entities";
 import AppDataSource from "../../config/ormconfig"
 import nlp from "compromise"
+import { Brackets } from "typeorm";
 
 const mealBaseQuery = () => (
     AppDataSource.getRepository(Meal)
@@ -22,12 +23,13 @@ export const getMealById = (id: number) => (
         .getOne()
 )
 
-export const getMealBySearch = (description: string) => (
-    mealBaseQuery()
-    .orWhere('mainDish.description = :description',{description})
-    // .orWhere('sideDish.description = :description',{description})
+export const getMealBySearch = async (userId: number, description: string) => {
+    const globalMeals = await getMealsByUserPreference(userId, description)
+    const mealsUser = await userMeals(userId, description)
+
+    return mealBaseQuery()
     .getMany()
-);
+};
 
 const userPreference = (userId: number) => (
     AppDataSource.getRepository(UserPreference)
@@ -39,7 +41,7 @@ const userPreference = (userId: number) => (
         .getOne()
 )
 
-export const getMealsByUserPreference = async (userId: number) => {
+const getMealsByUserPreference = async (userId: number, description: string) => {
     const userPreferences = await userPreference(userId)
     const mealCategories = userPreferences.mealCategories?.map(meal => meal.id)
     const dishCategories = userPreferences.dishCategories?.map(dish => dish.id)
@@ -63,14 +65,27 @@ export const getMealsByUserPreference = async (userId: number) => {
         query.andWhere('cuisinesMain.id IN (:...cuisinesMainIds)', { cuisinesMainIds: cuisines })
             .orWhere('cuisinesSide.id IN (:...cuisinesSideIds)', { cuisinesSideIds: cuisines })
 
+    query.where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
+    .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
+    .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
+    .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
+
     return query.orderBy('meal.rating', 'DESC').getMany()
 }
 
-const userMeals = (userId: number) => (
+const userMeals = (userId: number, description: string) => (
     AppDataSource.getRepository(UserMeal)
     .createQueryBuilder("UserMeal")
-    .leftJoinAndSelect("UserMeal.meal", "meal")
     .leftJoin("UserMeal.user", "user")
+    .leftJoinAndSelect("UserMeal.meal", "meal")
+    .innerJoinAndSelect('meal.mainDish', 'mainDish')
+    .innerJoinAndSelect('meal.sideDish', 'sideDish')
     .where("user.id = :userId", { userId })
+    .andWhere(new Brackets(qb => {
+        qb.where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
+        .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
+        .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
+        .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
+    }))
     .getMany()
 )

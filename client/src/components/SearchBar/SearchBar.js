@@ -1,14 +1,10 @@
 import { useState } from "react";
 import {Search} from '@mui/icons-material';
-import {TextField,IconButton,Autocomplete} from "@mui/material";
+import {TextField,IconButton} from "@mui/material";
 import SpeechButton from './SpeechButton'
 import classes from "./SearchBar.module.css";
-import MealServer from "../../serverAPI/meal";
 const SearchBar = ({searchQuery,setSearchQuery, extentiveSearch}) => { 
-  // const extentiveSearch = () => 
-  // {
-  //   MealServer.getMealBySearch(searchQuery);
-  // }
+
     return (
     <form className={classes.centerForm}>
     <div className={classes.inputRounded}>
