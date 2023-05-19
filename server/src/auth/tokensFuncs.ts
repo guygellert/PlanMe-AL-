@@ -4,6 +4,7 @@ import jwt, { verify } from "jsonwebtoken"
 import { ExtractJwt,Strategy  } from "passport-jwt";
 import { UserData } from "../utils/types";
 import passport from "passport";
+import AppDataSource from "../../config/ormconfig";
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -11,7 +12,7 @@ const jwtOptions = {
 }
 
 export const JwtStrategy = new Strategy(jwtOptions,async ({email, password},done) => {
-  const loggedUser = await User.findOneBy({mail: email,password: password})
+  const loggedUser = await AppDataSource.getRepository(User).findOneBy({mail: email,password: password})
   if(!loggedUser){
       return done(new Error('No user found in token'), false);
   }
