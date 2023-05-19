@@ -1,10 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, OneToOne, ManyToOne } from 'typeorm';
-import { BaseEntity } from 'typeorm/repository/BaseEntity';
 import { Cuisine } from './Cuisine';
 import { DishCategory } from './DishCategory';
 
 @Entity()
-export class Dish extends BaseEntity {
+export class Dish {
     @PrimaryGeneratedColumn()
     id: number;
 

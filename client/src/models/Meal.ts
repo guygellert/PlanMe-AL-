@@ -6,3 +6,8 @@ export interface Meal {
     sideDish: Dish;
     rating: number;
 }
+
+export interface MealCategory {
+    id: number;
+    description: string;
+}

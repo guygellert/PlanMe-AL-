@@ -7,11 +7,8 @@ export default class UserPreferenceServer {
             .catch(err => err.message)
     }
 
-    static getUserPreference(UserPreference) {
-        console.log(UserPreference)
-        const queryParams = {user: UserPreference.User.email};
-        const params = new URLSearchParams(queryParams)
-        return axios.get("/userPreference", { params: params})
+    static getUserPreference() {
+        return axios.get("/userPreference")
             .then(response => response.data.userPreference)
             .catch(err => err.message)
     }
