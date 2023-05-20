@@ -22,6 +22,13 @@ export const getMealById = (id: number) => (
     .andWhere({id})
     .getOne()
 );
+export const updateMeal = (meal: Meal,id:number) => (
+    mealBaseQuery()
+    .andWhere({id})
+    .update(meal)
+    // .set({rating:meal.rating})
+    .execute()
+);
 export const getMealBySearch = (description: string) => (
     mealBaseQuery()
     .orWhere('mainDish.description = :description',{description})
