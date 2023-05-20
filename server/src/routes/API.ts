@@ -1,7 +1,10 @@
 import { Router, Request, Response } from "express"
 import https from 'https';
-import { Cuisine } from "../entities";
+import { Cuisine, Dish } from "../entities";
 import { getAllCuisine,insertCuisines } from "../bl/cuisine-bl";
+import { getAllDish,insertDishes } from "../bl/dish-bl";
+import fs from "fs";
+import path from "path";
 const router = Router()
 router.get('/cuisine/insert/:letter', async (req: Request, res: Response) => {
     const {letter} = req.params
@@ -36,6 +39,58 @@ router.get('/cuisine/insert/:letter', async (req: Request, res: Response) => {
                 ListOfCuisines = ListOfCuisines.filter((item,index) =>ListOfCuisines.indexOf(item) === index)
                 console.log(ListOfCuisines)
                 insertCuisines(ListOfCuisines);
+            }
+        });
+    
+    })
+    return res.send("Data Has Been Submited");
+});
+router.get('/dishes/insert/:letter', async (req: Request, res: Response) => {
+    const {letter} = req.params
+    let data = '';
+    let ListOfExistCuisines:Array<Cuisine> = [];
+    let ListOfExistDishes:Array<Dish> = [];
+    ListOfExistCuisines = await getAllCuisine();
+    ListOfExistDishes = await getAllDish();
+    const request = https.get(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`,(response) =>
+    {
+        response.setEncoding('utf8');
+        // As data starts streaming in, add each chunk to "data"
+        response.on('data', (chunk) => { data += chunk; });
+        // The whole response has been received. Print out the result.
+        response.on('end', () => 
+        {
+          let mealsJson = JSON.parse(data);
+          let mealListByLetter = mealsJson.meals;
+          let ListOfDishes:Array<Dish> = [];
+          if(mealListByLetter)
+            {
+                mealListByLetter.forEach((meal:any) =>
+                {
+                    if(ListOfExistDishes.findIndex((dish) => { return dish.name.toLowerCase() == meal.strMeal.toLowerCase() }) < 0 &&
+                    ListOfDishes.findIndex((dishNew) => { return dishNew.name.toLowerCase() == meal.strMeal.toLowerCase() }) < 0)
+                   {   
+                        
+                        let newDish:Dish = new Dish();
+                        newDish.name = meal.strMeal;
+                        newDish.description = meal.strMeal;
+                        newDish.photo = '/' + meal.strMeal.split(" ").join('-');
+                        let pathImage = path.join(__dirname,'..','..','..','client','public')
+                        const file = fs.createWriteStream(pathImage + '/' + newDish.photo + ".jpg");
+                        https.get(meal.strMealThumb, responseImage =>{
+                            responseImage.pipe(file)
+                            file.on('finish',() =>{
+                                file.close();
+                            })
+                        });
+                        newDish.cuisines = ListOfExistCuisines.find((cuisine) =>{ return cuisine.description.toLowerCase() == meal.strArea.toLowerCase()})
+                        // newCuisine.description = meal.strArea;
+                        ListOfDishes.push(newDish);
+                    }
+                })
+                // console.log(ListOfCuisines)
+                console.log(ListOfDishes)
+                insertDishes(ListOfDishes);
             }
         });
     
