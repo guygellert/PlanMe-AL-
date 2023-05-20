@@ -6,6 +6,7 @@ import { createUser, login } from "./modules/User/handler"
 import { getAllCuisine } from "./modules/Cuisine/handler"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import API from "./routes/API"
 import { authenticate } from "./middlewares/auth"
 import { JwtStrategy, refreshToken } from "./auth/tokensFuncs"
 import { initializeDB } from "./setup"
@@ -31,7 +32,7 @@ passport.use('userJwt', JwtStrategy)
 app.use("/login", login)
 app.use("/register", createUser)
 app.use("/refresh_token", refreshToken)
-
+app.use("/api",API);
 initializeDB();
 
 app.use('/', router)
@@ -39,3 +40,4 @@ app.use('/', router)
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
 })
+
