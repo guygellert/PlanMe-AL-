@@ -17,7 +17,6 @@ export const updateUserPreference = async (req: Request, res: Response) => {
 
         let newUserPreferenceReq = req.body.newUserPreference;
         newUserPreferenceReq.id = user.id;
-        console.log(newUserPreferenceReq)
         const userPreference = await Service.updateUserPreference(newUserPreferenceReq)
 
         if (userPreference) {

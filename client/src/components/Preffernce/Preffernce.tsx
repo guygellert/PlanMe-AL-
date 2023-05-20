@@ -49,8 +49,6 @@ const handleValueChange = (field: keyof(UserPreferences),ind:string = "I") => (e
   return;
    
 
-  console.log(value);
-
   setUserPreffernce(prev => ({
       ...prev,
       [field]: value
@@ -61,7 +59,7 @@ const handleSave = async () => {
 
 }
 
-const returnValue = (idFind: number) => 
+const returnValue = (idFind:number) => 
 {
   let mealCat;
     mealCat = userPreffernce?.mealCategories.find((PrefMealCat) =>{

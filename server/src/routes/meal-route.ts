@@ -33,7 +33,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
     let doc = nlp(desc);
     let input = doc.nouns().toSingular().out('text');
     let inputPronuns = doc.pronouns().out('text');
-    console.log(input);
+
     let listOfPossible:Array<String> = input.split(" ");
     let listOfPronouns:Array<String> = inputPronuns.split(" ")
     listOfPossible = listOfPossible.filter((el:String) => listOfPronouns.includes(el));
@@ -42,16 +42,12 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
     let mealList =[];
     // const meal = await getMealBySearch(parseInt(id));
     listMatch = mealService.getPossibleOptions(listOfPossible);
-    // console.log(listMatch);
     for(let i = 0; i < listMatch.length; i++){
         let description = listMatch[i].join(" ");
-        console.log(description)
         if(description.length > 0){
         const meal = await getMealBySearch(description)
         mealList.push(meal);
         }
-        
-        console.log(mealList)
     }
     resp.json({mealList});
 })
