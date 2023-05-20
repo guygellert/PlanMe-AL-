@@ -6,11 +6,12 @@ import mealCategoryServer from "../../serverAPI/mealCategory"
 import dishCategoryServer from "../../serverAPI/dishCategory"
 import UserPreferenceServer from "../../serverAPI/userPreference"
 import { Cuisine } from "../../models/Cuisine"
-import { Meal, MealCategory } from "../../models/Meal"
+import { Meal } from "../../models/Meal-type"
 import { DishCategory } from "../../models/DishCategory"
 import { UserPreferences } from "../../models/UserPreferences"
 import { User } from "../../models/User"
 import jwtDecode from "jwt-decode"
+import { MealCategory } from "../../models/MealCategory"
 
 const Preffernce = () => {
   const currentUser = jwtDecode<User>(localStorage.getItem('token')|| "");

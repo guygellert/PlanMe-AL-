@@ -38,7 +38,7 @@ export const getUserPreference = async (req: Request, res: Response) => {
             },
             where: {
                 user: {
-                    id: 16
+                    id: req.user.id
                 }
             }
         })

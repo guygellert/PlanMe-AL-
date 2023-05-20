@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography } from "@mui/material"
 import { ExpandMore, StarOutline } from "@mui/icons-material"
 import Dish from "./Dish"
-import { MealType } from "../../types/meal"
 import MealServer from "../../serverAPI/meal"
+import { Meal as MealType } from "../../models/Meal-type"
 
 interface MealProps {
     meal: MealType

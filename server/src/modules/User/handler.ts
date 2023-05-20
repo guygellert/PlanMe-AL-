@@ -36,7 +36,7 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     try {
-        const user = await AppDataSource.getRepository(User).findOne({ where: { mail: req.body.user.mail }, select:{
+        const user = await AppDataSource.getRepository(User).findOne({ where: { mail: req.body.mail }, select:{
             id:true,
             password: true,
             firstName: true,
@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response) => {
         if (user == null)
             return res.status(httpStatus.OK).send({ message: "Wrong email or password" })
 
-        const match = await bcrypt.compare(req.body.user.password, user.password)
+        const match = await bcrypt.compare(req.body.password, user.password)
 
         if (!match)
             return res.status(httpStatus.OK).send({ message: "Wrong email or password" })

@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { DishCategory } from '../models/DishCategory'
 
 export default class DishCategoryServer {
-    static createDishCategory(newDishCategory) {
+    static createDishCategory(newDishCategory: DishCategory) {
         return axios.post("/dishCategory", { newDishCategory })
             .then(response => response)
             .catch(err => err.message)
