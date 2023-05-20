@@ -4,15 +4,15 @@ import Filter from "../../utils/filter"
 import Meal from "../Meal/Meal";
 import { Grid } from "@mui/material";
 import mealServer from "../../serverAPI/meal"
+import { Meal as MealType } from "../../models/Meal-type";
 // import { MealType } from "../../models/Meal";
 // import MealServer from "../../serverAPI/meal";
 const SearchMeal = () => {
-  const [meals, setMeals] = useState([]);
+  const [meals, setMeals] = useState<MealType[]>([]);
+
   useEffect(() => {
-    mealServer.getTopMeal().then((mealData) =>{
-      if(Array.isArray(mealData)){
+    mealServer.getTopMeal().then((mealData:MealType[]) =>{
         setMeals(mealData);
-      }
    });
   })
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,9 +29,9 @@ const SearchMeal = () => {
         padding: 20
       }}
     >
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <SearchBar  />
       <Grid container justifyContent="center" spacing={2} sx={{ overflow: "auto", height: "85vh" }}>
-        {dataFiltered.map(meal => {
+        {dataFiltered.map((meal:MealType) => {
           return (
             <Grid item xs={4}>
               <Meal meal={meal} />

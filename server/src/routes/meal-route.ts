@@ -67,7 +67,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 
 mealRouter.get('/top', async (req, resp) => {
    const topMeals = await getTopMeals(15);
-   resp.json({topMeals});
+   resp.json(topMeals);
 })
 
 

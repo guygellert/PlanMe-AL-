@@ -1,4 +1,5 @@
-export interface MealType {
+
+export interface MealCategory {
     id: number;
     description: string;
 }
