@@ -35,10 +35,9 @@ export const userPassportMiddleware =  (
   };
 
 export const generateAccessToken = (user: User) => {
-  const { id } = user;
-  console.log(user)
   const accessToken = jwt.sign(
     { 
+      id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.mail

@@ -36,7 +36,13 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     try {
-        const user = await AppDataSource.getRepository(User).findOne({ where: { mail: req.body.user.mail } })
+        const user = await AppDataSource.getRepository(User).findOne({ where: { mail: req.body.user.mail }, select:{
+            id:true,
+            password: true,
+            firstName: true,
+            lastName: true,
+            mail: true
+        } })
 
         if (user == null)
             return res.status(httpStatus.OK).send({ message: "Wrong email or password" })
