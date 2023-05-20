@@ -23,7 +23,7 @@ const Login: React.FC<LoginProps> = ({ handleToken }) => {
 
     const handleLogin = async () => {
         try {
-            const login = await UserServer.login(user)
+            const login = await UserServer.login(user.mail, user.password)
 
             if (login.data.message === "Wrong email or password") {
                 setDisplayAlert(true)
@@ -35,7 +35,7 @@ const Login: React.FC<LoginProps> = ({ handleToken }) => {
                 setAuthToken(token)
                 handleToken(token)
 
-                navigate("/search")
+                navigate("/home")
             }
         } catch {
 

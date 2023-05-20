@@ -4,6 +4,7 @@ import UserServer from "../../serverAPI/user"
 import { useNavigate } from "react-router-dom"
 import { setAuthToken } from "../../auth/auth"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { User } from "../../models/User"
 
 interface RegistrationProps {
     handleToken: (token: string) => void
@@ -11,7 +12,7 @@ interface RegistrationProps {
 
 const Registration: React.FC<RegistrationProps> = ({ handleToken }) => {
     const navigate = useNavigate()
-    const [newUser, setNewUser] = useState({ firstName: "", lastName: "", mail: "", password: "" })
+    const [newUser, setNewUser] = useState<User>({ firstName: "", lastName: "", mail: "", password: "" })
     const [displayAlert, setDisplayAlert] = useState(false)
     const [displayPassword, setDisplayPassword] = useState(false)
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Chip, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import MealCategoryServer from "../../serverAPI/mealCategory";
-import { Meal, MealCategory } from "../../models/Meal";
+import { MealCategory } from "../../models/MealCategory";
 
 const Profile: React.FC = (): JSX.Element => {
     const [categories, setCategories] = useState<string[]>(['Asian', 'Italian']);
