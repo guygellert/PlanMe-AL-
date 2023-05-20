@@ -41,7 +41,7 @@ const ReactRouter = () => {
 
     return (
         <Router>
-            {token && <Navbar />}
+             <Navbar />
             <Routes>
                 <Route path="/" element={
                     <LoginRoute>
