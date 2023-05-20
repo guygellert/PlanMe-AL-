@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Box, Chip, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import MealCategoryServer from "../../serverAPI/mealCategory";
-import { Meal } from "../../models/Meal";
+import { MealCategory } from "../../models/MealCategory";
 
 const Profile: React.FC = (): JSX.Element => {
     const [categories, setCategories] = useState<string[]>(['Asian', 'Italian']);
-    const [mealCategories, setMealCategories] = useState<Meal[]>([]);
+    const [mealCategories, setMealCategories] = useState<MealCategory[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        MealCategoryServer.getMealCategory().then((mealCategoriesData: Meal[]) =>{
+        MealCategoryServer.getMealCategory().then((mealCategoriesData: MealCategory[]) =>{
             if(Array.isArray(mealCategoriesData)){
               setMealCategories(mealCategoriesData);
             }
@@ -47,7 +47,7 @@ const Profile: React.FC = (): JSX.Element => {
                     </div>
                     <Typography sx={{ fontSize: 15, fontFamily: "sans-serif", margin: 5}}>Allergies: None</Typography>
                     <FormControl>
-                        {mealCategories && mealCategories.map((mealCategory: Meal) => 
+                        {mealCategories && mealCategories.map((mealCategory: MealCategory) => 
                         <div key={mealCategory.id}>
                             <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
                             <RadioGroup

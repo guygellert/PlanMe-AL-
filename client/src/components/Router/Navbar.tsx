@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const menu = [
         {
-            path: "/search",
+            path: "/home",
             text: "Home"
         },
         {

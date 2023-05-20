@@ -26,7 +26,7 @@ const LoginRoute: React.FC<RouteProps> = ({ children }) => {
     const token = localStorage.getItem("token")
 
     if (token) {
-        return <Navigate to="/search" replace />
+        return <Navigate to="/home" replace />
     }
 
     return children
@@ -41,7 +41,7 @@ const ReactRouter = () => {
 
     return (
         <Router>
-            {token && <Navbar />}
+             <Navbar />
             <Routes>
                 <Route path="/" element={
                     <LoginRoute>
@@ -54,20 +54,15 @@ const ReactRouter = () => {
                         <Home />
                     </ProtectedRoute>
                 } />
-                <Route path="/search" element={
-                    <ProtectedRoute>
-                        <SearchMeal />
-                    </ProtectedRoute>
-                } />
                 <Route path="/profile" element={
                     <ProtectedRoute>
                         <Profile />
                     </ProtectedRoute>
                 } />
                 <Route path="/pref" element={
-                    // <ProtectedRoute>
+                    <ProtectedRoute>
                         <Preffernce />
-                    // </ProtectedRoute>
+                    </ProtectedRoute>
                 } />
             </Routes>
         </Router>

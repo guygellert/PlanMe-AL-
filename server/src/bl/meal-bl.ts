@@ -86,6 +86,12 @@ const userMeals = (userId: number, description: string) => (
         .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
-    }))
-    .getMany()
-)
+    })).getMany())
+
+export const updateMeal = (meal: Meal,id:number) => (
+    mealBaseQuery()
+    .andWhere({id})
+    .update(meal)
+    // .set({rating:meal.rating})
+    .execute()
+);

@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from 'typeorm/repository/BaseEntity';
+
 
 @Entity()
-export class Cuisine extends BaseEntity {
+export class Cuisine {
     @PrimaryGeneratedColumn()
     id: number;
 

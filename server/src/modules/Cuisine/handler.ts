@@ -26,7 +26,6 @@ export const createCuisine = async (req: Request, res: Response) => {
 export const getAllCuisine = async (req: Request, res: Response) => {
     try {
         const cuisines = await AppDataSource.getRepository(Cuisine).find();
-        
         return res.status(httpStatus.OK).send({ cuisines: cuisines });
     } catch (err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err)

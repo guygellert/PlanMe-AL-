@@ -1,7 +1,8 @@
 import React from "react"
 import { Card, CardHeader, CardMedia, IconButton } from "@mui/material"
 import { MoreVert } from "@mui/icons-material"
-import { DishType } from "../../types/dish"
+import { Dish as DishType} from "../../models/Dish"
+
 
 interface DishProps {
     dish: DishType

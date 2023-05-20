@@ -1,19 +1,24 @@
 // import React from "react"
 import React, { useState,useEffect } from "react"
-import { Button,CardHeader,Card,CardContent,CardActions,Autocomplete,Chip,TextField,RadioGroup,Radio,FormControlLabel,FormControl,FormLabel,Grid  } from '@mui/material'
+import { Button,CardHeader,Card,CardContent,CardActions,Autocomplete,TextField,RadioGroup,Radio,FormControlLabel,FormControl,FormLabel,Grid  } from '@mui/material'
 import cuisineServer from "../../serverAPI/cuisine"
 import mealCategoryServer from "../../serverAPI/mealCategory"
 import dishCategoryServer from "../../serverAPI/dishCategory"
 import UserPreferenceServer from "../../serverAPI/userPreference"
 import { Cuisine } from "../../models/Cuisine"
-import { Meal } from "../../models/Meal"
+import { Meal } from "../../models/Meal-type"
 import { DishCategory } from "../../models/DishCategory"
+import { UserPreferences } from "../../models/UserPreferences"
+import { User } from "../../models/User"
+import jwtDecode from "jwt-decode"
+import { MealCategory } from "../../models/MealCategory"
+
 const Preffernce = () => {
-  
+  const currentUser = jwtDecode<User>(localStorage.getItem('token')|| "");
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
-  const [mealCategories, setMealCategories] = useState<Meal[]>([]);
+  const [mealCategories, setMealCategories] = useState<MealCategory[]>([]);
   const [dishCategories, setDishCategories] = useState<DishCategory[]>([]);
-  const [userPreffernce, setUserPreffernce] = useState({User:{"email":localStorage.email},cuisines: [], dishCategories:[],mealCategories:[]})
+  const [userPreffernce, setUserPreffernce] = useState<UserPreferences>({id: 0, user: currentUser, cuisines:[], dishCategories:[], mealCategories:[]});
 
   useEffect(() => {
     cuisineServer.getCuisines().then((cuisinesData) =>{
@@ -36,59 +41,29 @@ const Preffernce = () => {
 
   UserPreferenceServer.getUserPreference(userPreffernce).then((UserPreferenceData) => {
     setUserPreffernce(UserPreferenceData)
-
   })
    
 }, []);
-const handleValueChange = (field: string,ind:string = "I") => (event: React.ChangeEvent<HTMLInputElement>,value) => {
+const handleValueChange = (field: keyof(UserPreferences),ind:string = "I") => (event: React.SyntheticEvent<Element, Event>,value:any) => {
   event.preventDefault();
-  let fieldValue = userPreffernce[field];
-  switch (field){
-    case 'cuisines' || 'dishCategories':
-    {
-      fieldValue = value;
-      // fieldValue.push(event.target.value);
-      break;
-    }
-    case 'mealCategories':{
-      fieldValue = [... fieldValue];
-      if(value.length)
-      {
-        let mealCat = mealCategories.find((mea) =>{
-          if(mea.id == value)
-          {
-            return mea;
-          }
-        })
-      fieldValue.push(mealCat);
-      }
-      else
-      {
-        fieldValue = fieldValue.filter((fValue) => {return fValue.id != value;});
-      }
-      break;
-    }
-    default:
-    {
-      fieldValue = value;
-      break;
-    }
-  }
+  if(!userPreffernce)
+  return;
+   
+
   setUserPreffernce(prev => ({
       ...prev,
-      [field]: fieldValue
+      [field]: value
   }))
 }       
 const handleSave = async () => {
-
   UserPreferenceServer.updateUserPreference(userPreffernce);
 
 }
 
-const returnValue = (idFind) => 
+const returnValue = (idFind:number) => 
 {
   let mealCat;
-    mealCat = userPreffernce.mealCategories.find((PrefMealCat) =>{
+    mealCat = userPreffernce?.mealCategories.find((PrefMealCat) =>{
       if(PrefMealCat.id == idFind)
       {
         return PrefMealCat.id
@@ -112,7 +87,7 @@ const returnValue = (idFind) =>
         options={cuisines}
         getOptionLabel={(option) => option.description}
         filterSelectedOptions
-        value={userPreffernce.cuisines}
+        value={userPreffernce?.cuisines || []}
         onChange={handleValueChange("cuisines")}
         renderInput={(params) => (
           <TextField
@@ -125,7 +100,7 @@ const returnValue = (idFind) =>
         multiple
         id="tags-outlined"
         options={dishCategories}
-        value={userPreffernce.dishCategories}
+        value={userPreffernce?.dishCategories || []}
         onChange={handleValueChange("dishCategories")}
         getOptionLabel={(option) => option.description}
         filterSelectedOptions

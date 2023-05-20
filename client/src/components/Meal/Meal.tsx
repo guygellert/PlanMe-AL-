@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography } from "@mui/material"
 import { ExpandMore, StarOutline } from "@mui/icons-material"
 import Dish from "./Dish"
-import { MealType } from "../../types/meal"
+import MealServer from "../../serverAPI/meal"
+import { Meal as MealType } from "../../models/Meal-type"
 
 interface MealProps {
     meal: MealType
@@ -13,6 +14,10 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
 
     const handleExpandClick = () => {
         setExpanded(!expanded)
+    }
+
+    const handleClickIWant = () => {
+        MealServer.updateMealRating(meal.id)
     }
 
     return (
@@ -45,7 +50,7 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardHeader
                     action={
-                        <Button variant="contained" sx={{ marginTop: "1em" }}>
+                        <Button onClick={handleClickIWant} variant="contained" sx={{ marginTop: "1em" }}>
                             I want this meal
                         </Button>
                     }
