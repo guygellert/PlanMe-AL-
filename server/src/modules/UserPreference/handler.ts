@@ -29,7 +29,6 @@ export const updateUserPreference = async (req: Request, res: Response) => {
 }
 
 export const getUserPreference = async (req: Request, res: Response) => {
-    console.log('ha')
     try {
         const userPreference = await AppDataSource.getRepository(UserPreference).findOne({
             relations: {

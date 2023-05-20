@@ -1,6 +1,7 @@
 import AppDataSource from "../config/ormconfig";
 
 export const initializeDB = () =>{
+    console.log("HI Guy")
     AppDataSource.initialize()
   .then(() => {
     console.log('Connected to database');

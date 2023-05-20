@@ -1,6 +1,5 @@
 import { Meal } from "../../src/entities";
 import AppDataSource from "../../config/ormconfig"
-import nlp from "compromise"
 
 const mealBaseQuery = () => (
     AppDataSource.getRepository(Meal)
