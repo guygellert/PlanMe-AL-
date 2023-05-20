@@ -19,5 +19,9 @@ export default class MealServer {
             .then(response => response.data.meal)
             .catch(err => err.message)
     }
-    
+    static updateMealRating(id) {
+        return axios.put("/meal/updateRating/" + id)
+            .then(response => response.data.meal)
+            .catch(err => err.message)
+    }
 }
