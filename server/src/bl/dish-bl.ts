@@ -6,7 +6,10 @@ const dishBaseQuery = () => (
 
 export const getAllDish = () => (
     dishBaseQuery()
-    .find()
+    .createQueryBuilder('dish')
+    .innerJoinAndSelect('dish.cuisines','cuisines')
+    .getMany()
+    
 );
 export const insertDishes = (ListOfDishes:Array<Dish>) => (
     dishBaseQuery()

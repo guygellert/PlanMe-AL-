@@ -1,8 +1,9 @@
 import { Router, Request, Response } from "express"
 import https from 'https';
-import { Cuisine, Dish } from "../entities";
+import { Cuisine, Dish, Meal } from "../entities";
 import { getAllCuisine,insertCuisines } from "../bl/cuisine-bl";
 import { getAllDish,insertDishes } from "../bl/dish-bl";
+import {getAllMeals, insertMeals} from "../bl/meal-bl";
 import fs from "fs";
 import path from "path";
 const router = Router()
@@ -97,4 +98,70 @@ router.get('/dishes/insert/:letter', async (req: Request, res: Response) => {
     })
     return res.send("Data Has Been Submited");
 });
+
+router.get('/meals/insert/:side', async (req: Request, res: Response) => {
+    const {side} = req.params
+    const sideOptions = ["side","Deserts","Starters"];
+    if(sideOptions.indexOf(side) < 0){
+        res.send("Insert Side Category");
+        return;
+    }
+    let data = '';
+    let ListOfExistCuisines:Array<Cuisine> = [];
+    let ListOfExistDishes:Array<Dish> = [];
+    let ListOfExistMeals:Array<Meal> = [];
+    ListOfExistMeals = await getAllMeals();
+    ListOfExistCuisines = await getAllCuisine();
+    ListOfExistDishes = await getAllDish();
+    const request = https.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${side}`,(response) =>
+    {
+        response.setEncoding('utf8');
+        // As data starts streaming in, add each chunk to "data"
+        response.on('data', (chunk) => { data += chunk; });
+        // The whole response has been received. Print out the result.
+        response.on('end', () => 
+        {
+          let mealsJson = JSON.parse(data);
+          let mealListByLetter = mealsJson.meals;
+          let ListOfMeals:Array<Meal> = [];
+          if(mealListByLetter)
+            {
+                mealListByLetter.forEach((meal:any) =>
+                {
+                    
+                    let sideDish = ListOfExistDishes.find((EXdish) => { return EXdish.name.toLowerCase() == meal.strMeal.toLowerCase()});
+                    let ListOfDishesCuisines = ListOfExistDishes.filter((dishesCuisines) =>{return dishesCuisines.cuisines.id == sideDish.cuisines.id})
+                    ListOfDishesCuisines.forEach((mealComb) =>{
+
+                    
+                //     ListOfDishes.findIndex((dishNew) => { return dishNew.name.toLowerCase() == meal.strMeal.toLowerCase() }) < 0)
+                //    {   
+                        
+                        let newMeal:Meal = new Meal();
+                        newMeal.mainDish = mealComb;
+                        newMeal.sideDish = sideDish;
+                        newMeal.rating = 0;
+                        // newDish.cuisines = ListOfExistCuisines.find((cuisine) =>{ return cuisine.description.toLowerCase() == meal.strArea.toLowerCase()})
+                        // newCuisine.description = meal.strArea;
+                        if(ListOfExistMeals.findIndex((mealIsComb) => { return mealIsComb.mainDish.id == newMeal.mainDish.id &&
+                                                                               mealIsComb.sideDish.id == newMeal.sideDish.id }) < 0 &&
+                            newMeal.mainDish.id != newMeal.sideDish.id &&
+                            ListOfMeals.findIndex((mealIsNewComb) => { return mealIsNewComb.mainDish.id == newMeal.mainDish.id &&
+                                mealIsNewComb.sideDish.id == newMeal.sideDish.id }) )
+                        {
+                            ListOfMeals.push(newMeal);
+                        }
+                })
+                    // }
+                })
+                // console.log(ListOfCuisines)
+                console.log(ListOfMeals)
+                insertMeals(ListOfMeals);
+            }
+        });
+    
+    })
+    return res.send("Data Has Been Submited");
+});
+
 export default router
