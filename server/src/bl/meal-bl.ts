@@ -1,6 +1,9 @@
 import { Meal } from "../../src/entities";
 import AppDataSource from "../../config/ormconfig"
 
+const mealBase = () => (
+    AppDataSource.getRepository(Meal)
+);
 const mealBaseQuery = () => (
     AppDataSource.getRepository(Meal)
     .createQueryBuilder('meal')
@@ -16,6 +19,11 @@ export const getTopMeals = (maxRows: number) => (
     .getMany()
 );
 
+export const getAllMeals = () => (
+    mealBaseQuery()
+    .getMany()
+);
+
 export const getMealById = (id: number) => (
     mealBaseQuery()
     .andWhere({id})
@@ -27,6 +35,10 @@ export const updateMeal = (meal: Meal,id:number) => (
     .update(meal)
     // .set({rating:meal.rating})
     .execute()
+);
+export const insertMeals = (meals: Array<Meal>) => (
+    mealBase()
+    .insert(meals)
 );
 export const getMealBySearch = (description: string) => (
     mealBaseQuery()
