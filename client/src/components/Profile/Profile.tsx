@@ -30,7 +30,7 @@ const Profile: React.FC = (): JSX.Element => {
                 alt="The house from the offer."
                 src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
             />
-            <Typography sx={{ fontSize: 30, fontFamily: "sans-serif"}}>David Bowie</Typography>
+            <Typography sx={{ fontSize: 30 }}>David Bowie</Typography>
             {
                 isLoading ? 
                 <CircularProgress /> :
