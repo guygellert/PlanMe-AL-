@@ -3,6 +3,9 @@ import AppDataSource from "../../config/ormconfig"
 import nlp from "compromise"
 import { Brackets } from "typeorm";
 
+const mealBase = () => (
+    AppDataSource.getRepository(Meal)
+);
 const mealBaseQuery = () => (
     AppDataSource.getRepository(Meal)
         .createQueryBuilder('meal')
@@ -15,6 +18,11 @@ export const getTopMeals = (maxRows: number) => (
         .orderBy('meal.rating', 'DESC')
         .take(maxRows)
         .getMany()
+);
+
+export const getAllMeals = () => (
+    mealBaseQuery()
+    .getMany()
 );
 
 export const getMealById = (id: number) => (
@@ -114,3 +122,8 @@ export const updateMeal = (meal: Meal,id:number) => (
     // .set({rating:meal.rating})
     .execute()
 );
+export const insertMeals = (meals: Array<Meal>) => (
+    mealBase()
+    .insert(meals)
+);
+

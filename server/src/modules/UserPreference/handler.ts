@@ -28,7 +28,6 @@ export const updateUserPreference = async (req: Request, res: Response) => {
 }
 
 export const getUserPreference = async (req: Request, res: Response) => {
-    console.log('ha')
     try {
         const userPreference = await AppDataSource.getRepository(UserPreference).findOne({
             relations: {
@@ -38,7 +37,7 @@ export const getUserPreference = async (req: Request, res: Response) => {
             },
             where: {
                 user: {
-                    id: 16
+                    id: req.user.id
                 }
             }
         })
