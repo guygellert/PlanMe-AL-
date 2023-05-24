@@ -10,7 +10,7 @@ export default class MealServer {
 
     static getMealBySearch(desc:string) {
         return axios.get("/meal/FilterByDesc/" + desc)
-            .then(response => response.data.dishCategory)
+            .then(response => response.data)
             .catch(err => err.message)
     }
     static getTopMeal() {

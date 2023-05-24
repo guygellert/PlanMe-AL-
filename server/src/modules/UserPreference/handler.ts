@@ -14,7 +14,6 @@ export const updateUserPreference = async (req: Request, res: Response) => {
     try {
         // let stuff = jwt.decode(req.body.newUserPreference.User.token)
         const user = await AppDataSource.getRepository(User).findOne({ where: { id: req.user.id} })
-
         let newUserPreferenceReq = req.body.newUserPreference;
         newUserPreferenceReq.User = user;
         const userPreference = await updateNewUserPreference(newUserPreferenceReq);

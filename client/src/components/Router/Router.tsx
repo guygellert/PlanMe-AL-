@@ -4,7 +4,6 @@ import Home from "../Home/Home";
 import Login from "../Login/Login";
 import Registration from "../Login/Registration";
 import Preffernce from "../Preffernce/Preffernce";
-import SearchMeal from "../SearchBar/SearchMeal";
 import Navbar from "./Navbar";
 import Profile from "../Profile/Profile";
 
@@ -33,7 +32,7 @@ const LoginRoute: React.FC<RouteProps> = ({ children }) => {
 }
 
 const ReactRouter = () => {
-    const [token, setToken] = useState<string>()
+    const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
 
     const handleToken = (token: string) => {
         setToken(token)
