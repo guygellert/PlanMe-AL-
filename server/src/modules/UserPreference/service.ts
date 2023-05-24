@@ -15,7 +15,7 @@ export default class Service {
     static updateUserPreference = async (userPreference: UserPreferenceInput) => {
         const newUserPreference= new UserPreference()
         Object.assign(newUserPreference, userPreference)
-        return AppDataSource.getRepository(UserPreference).save(newUserPreference)
+        // return AppDataSource.getRepository(UserPreference).save(newUserPreference)
     }
     
 }

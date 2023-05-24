@@ -21,31 +21,42 @@ const Preffernce = () => {
   const [dishCategories, setDishCategories] = useState<DishCategory[]>([]);
   const [userPreffernce, setUserPreffernce] = useState<UserPreferences>({id: 0, user: currentUser, cuisines:[], dishCategories:[], mealCategories:[]});
 
-  useEffect(() => {
-    cuisineServer.getCuisines().then((cuisinesData) =>{
-      if(Array.isArray(cuisinesData)){
+  useEffect(() => 
+  {
+    cuisineServer.getCuisines().then((cuisinesData) =>
+    {
+      if(Array.isArray(cuisinesData))
+      {
         setCuisines(cuisinesData);
       }
-   });
-
-   mealCategoryServer.getMealCategory().then((mealCategoriesData) =>{
-    if(Array.isArray(mealCategoriesData)){
-      setMealCategories(mealCategoriesData);
-    }
-  });
-  dishCategoryServer.getDishCategory().then((dishCategoriesData) =>{
-    if(Array.isArray(dishCategoriesData)){
-      setDishCategories(dishCategoriesData)
-    }
-    
-  })
-
-  UserPreferenceServer.getUserPreference().then((UserPreferenceData) => {
-    setUserPreffernce(UserPreferenceData)
-  })
-   
-}, []);
-const handleValueChange = (field: keyof(UserPreferences),ind:string = "I") => (event: React.SyntheticEvent<Element, Event>,value:any) => {
+      mealCategoryServer.getMealCategory().then((mealCategoriesData) =>
+      {
+        if(Array.isArray(mealCategoriesData))
+        {
+          setMealCategories(mealCategoriesData);
+        }
+        
+        dishCategoryServer.getDishCategory().then((dishCategoriesData) =>
+        {
+          if(Array.isArray(dishCategoriesData))
+          {
+            setDishCategories(dishCategoriesData)
+          }
+          UserPreferenceServer.getUserPreference().then((UserPreferenceData) => 
+          {
+              console.log(UserPreferenceData)
+              if(!UserPreferenceData)
+              {
+                return;
+              }
+              setUserPreffernce(UserPreferenceData)
+          })
+        });
+      });
+    })
+  }, []);
+const 
+handleValueChange = (field: keyof(UserPreferences),ind:string = "I") => (event: React.SyntheticEvent<Element, Event>,value:any) => {
   event.preventDefault();
   if(!userPreffernce)
   return;
@@ -63,6 +74,8 @@ const handleSave = async () => {
 
 const returnValue = (idFind:number) => 
 {
+  if(!userPreffernce)
+  return;
   let mealCat;
     mealCat = userPreffernce?.mealCategories.find((PrefMealCat) =>{
       if(PrefMealCat.id == idFind)

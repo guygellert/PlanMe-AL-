@@ -48,7 +48,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 
     let listOfPossible:Array<String> = input.split(" ");
     let listOfPronouns:Array<String> = inputPronuns.split(" ")
-    // listOfPossible = listOfPossible.filter((el:String) => listOfPronouns.includes(el));
+    listOfPossible = listOfPossible.filter((el:String) => !listOfPronouns.includes(el));
     let listMatch:any[][] = [];
     let mealService:MealService = new MealService();
     let mealList: Meal[] =[];

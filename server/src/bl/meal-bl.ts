@@ -49,6 +49,7 @@ const userPreference = (userId: number) => (
 )
 
 const mealPrioritize = (meals: Meal[], prefDishCategory: number[], prefCuisines: number[]) => {
+    
     const mealsWithPriority = meals.map((meal, index) =>{
         let priority = meal.rating > 0 ? 3*(meals.length - index) : 0;
         if(meal.mainDish.cuisines && prefCuisines.includes(meal.mainDish.cuisines.id) ){
@@ -78,9 +79,9 @@ const mealPrioritize = (meals: Meal[], prefDishCategory: number[], prefCuisines:
 
 const getMealsByUserPreference = async (userId: number, description: string) => {
     const userPreferences = await userPreference(userId)
-    const mealCategories = userPreferences.mealCategories?.map(meal => meal.id)
-    const dishCategories = userPreferences.dishCategories?.map(dish => dish.id)
-    const cuisines = userPreferences.cuisines?.map(cuisine => cuisine.id)
+    const mealCategories = (userPreferences && userPreferences.mealCategories)?.map(meal => meal.id)
+    const dishCategories = (userPreferences && userPreferences.dishCategories)?.map(dish => dish.id)
+    const cuisines = ( userPreferences && userPreferences.cuisines)?.map(cuisine => cuisine.id)
 
     const mealsBysearch = await mealBaseQuery()
         .leftJoinAndSelect('meal.MealCategories', 'MealCategories')
