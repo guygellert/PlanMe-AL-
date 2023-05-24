@@ -1,4 +1,4 @@
-import { Meal, UserMeal, UserPreference } from "../../src/entities";
+import { Cuisine, DishCategory, Meal, UserMeal, UserPreference } from "../../src/entities";
 import AppDataSource from "../../config/ormconfig"
 import nlp from "compromise"
 import { Brackets } from "typeorm";
@@ -27,8 +27,7 @@ export const getMealBySearch = async (userId: number, description: string) => {
     const globalMeals = await getMealsByUserPreference(userId, description)
     const mealsUser = await userMeals(userId, description)
 
-    return mealBaseQuery()
-    .getMany()
+    return globalMeals;
 };
 
 const userPreference = (userId: number) => (
@@ -37,9 +36,37 @@ const userPreference = (userId: number) => (
         .leftJoinAndSelect("userPreference.mealCategories", "mealCategories")
         .leftJoinAndSelect("userPreference.dishCategories", "dishCategories")
         .leftJoinAndSelect("userPreference.cuisines", "cuisines")
-        .where("userPreference.id = :userId", { userId })
+        .where("userPreference.user.id = :userId", { userId })
         .getOne()
 )
+
+const mealPrioritize = (meals: Meal[], prefDishCategory: number[], prefCuisines: number[]) => {
+    const mealsWithPriority = meals.map((meal, index) =>{
+        let priority = meal.rating > 0 ? 3*(meals.length - index) : 0;
+        if(meal.mainDish.cuisines && prefCuisines.includes(meal.mainDish.cuisines.id) ){
+            priority += 1;
+        }
+
+        if(meal.sideDish.cuisines && prefCuisines.includes(meal.mainDish.cuisines.id) ){
+            priority += 1;
+        }
+
+        meal.mainDish.DishCategories.forEach(category => {
+            if(prefDishCategory.includes(category.id)){
+                priority += 1;
+            }
+        });
+
+        meal.sideDish.DishCategories.forEach(category => {
+            if(prefDishCategory.includes(category.id)){
+                priority += 1;
+            }
+        });
+
+        return ({...meal, priorityRate: priority })})
+    
+    return mealsWithPriority.sort((a,b) => b.priorityRate - a.priorityRate);
+}
 
 const getMealsByUserPreference = async (userId: number, description: string) => {
     const userPreferences = await userPreference(userId)
@@ -47,30 +74,22 @@ const getMealsByUserPreference = async (userId: number, description: string) => 
     const dishCategories = userPreferences.dishCategories?.map(dish => dish.id)
     const cuisines = userPreferences.cuisines?.map(cuisine => cuisine.id)
 
-    const query = mealBaseQuery()
+    const mealsBysearch = await mealBaseQuery()
         .leftJoinAndSelect('meal.MealCategories', 'MealCategories')
         .leftJoinAndSelect('mainDish.DishCategories', 'DishCategoriesMain')
         .leftJoinAndSelect('mainDish.cuisines', 'cuisinesMain')
         .leftJoinAndSelect('sideDish.DishCategories', 'DishCategoriesSide')
         .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
+        .where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
+        .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
+        .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
+        .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
+        // .andWhere('MealCategories.id IN (:...MealCategoriesIds)', { MealCategoriesIds: mealCategories })
+        .orderBy('meal.rating', 'DESC')
+        .getMany();
 
-    if (mealCategories.length)
-        query.where('MealCategories.id IN (:...MealCategoriesIds)', { MealCategoriesIds: mealCategories })
 
-    if (dishCategories.length)
-        query.andWhere('DishCategoriesMain.id IN (:...DishCategoriesMainIds)', { DishCategoriesMainIds: dishCategories })
-            .orWhere('DishCategoriesSide.id IN (:...DishCategoriesSideIds)', { DishCategoriesSideIds: dishCategories })
-
-    if (cuisines.length)
-        query.andWhere('cuisinesMain.id IN (:...cuisinesMainIds)', { cuisinesMainIds: cuisines })
-            .orWhere('cuisinesSide.id IN (:...cuisinesSideIds)', { cuisinesSideIds: cuisines })
-
-    query.where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
-    .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
-    .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
-    .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
-
-    return query.orderBy('meal.rating', 'DESC').getMany()
+    return mealPrioritize(mealsBysearch,dishCategories,cuisines);
 }
 
 const userMeals = (userId: number, description: string) => (

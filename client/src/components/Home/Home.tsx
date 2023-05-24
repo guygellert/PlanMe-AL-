@@ -1,11 +1,9 @@
-import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Meal as MealType} from "../../models/Meal-type";
 import mealServer from "../../serverAPI/meal"
-import SearchMeal from "../SearchBar/SearchMeal";
-import SearchBar from "../SearchBar/SearchBar";
 import { Grid } from "@mui/material";
 import Meal from "../Meal/Meal";
+import Search from "../Search/Search";
 
 const Home: React.FC = () => {
     const [topMeals, setTopMeals] = useState<MealType[]>([]);
@@ -15,7 +13,6 @@ const Home: React.FC = () => {
           setTopMeals(mealData);
      });
     },[])
-
   
     return (
       <div
@@ -27,10 +24,10 @@ const Home: React.FC = () => {
           padding: 20
         }}
       >
-        <SearchBar />
+        <Search/>
         <h2>Most loved</h2>
         <Grid container justifyContent="center" spacing={2} sx={{ overflow: "auto", height: "85vh" }}>
-          {topMeals.map(meal => {
+          {topMeals?.map(meal => {
             return (
               <Grid item xs={4}>
                 <Meal meal={meal} />

@@ -3,6 +3,7 @@ import { Router } from "express";
 import nlp from "compromise"
 import { getTopMeals, getMealById, getMealBySearch, updateMeal } from '../bl/meal-bl';
 import MealService from "../modules/Meal/service";
+import { Meal } from '../entities/Meal';
 const mealRouter = Router();
 
 mealRouter.get('/', async (req, resp) => {
@@ -47,20 +48,23 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 
     let listOfPossible:Array<String> = input.split(" ");
     let listOfPronouns:Array<String> = inputPronuns.split(" ")
-    listOfPossible = listOfPossible.filter((el:String) => listOfPronouns.includes(el));
+    // listOfPossible = listOfPossible.filter((el:String) => listOfPronouns.includes(el));
     let listMatch:any[][] = [];
     let mealService:MealService = new MealService();
-    let mealList =[];
+    let mealList: Meal[] =[];
     // const meal = await getMealBySearch(parseInt(id));
     listMatch = mealService.getPossibleOptions(listOfPossible);
+    console.log(listMatch);
     for(let i = 0; i < listMatch.length; i++){
         let description = listMatch[i].join(" ");
         if(description.length > 0){
         const meal = await getMealBySearch(req.user.id, description)
-        mealList.push(meal);
+        console.log(meal);
+        mealList = mealList.concat(meal);
+        console.log(mealList)
         }
     }
-    resp.json({mealList});
+    resp.json(mealList);
 })
 
 mealRouter.get('/top', async (req, resp) => {
