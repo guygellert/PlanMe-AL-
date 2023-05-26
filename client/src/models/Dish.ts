@@ -5,5 +5,6 @@ export interface Dish {
     name: string;
     description: string;
     photo: string;
+    isMain: boolean;
     cuisine: Cuisine;
 }
