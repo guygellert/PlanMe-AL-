@@ -2,19 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Box, Chip, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import MealCategoryServer from "../../serverAPI/mealCategory";
 import { MealCategory } from "../../models/MealCategory";
+import jwtDecode from "jwt-decode";
+import { User } from "../../models/User";
+import { useQuery } from 'react-query'
 
 const Profile: React.FC = (): JSX.Element => {
+    const currentUserId = jwtDecode<User>(localStorage.getItem('token')|| "")?.id;
     const [categories, setCategories] = useState<string[]>(['Asian', 'Italian']);
-    const [mealCategories, setMealCategories] = useState<MealCategory[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    // const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        MealCategoryServer.getMealCategory().then((mealCategoriesData: MealCategory[]) =>{
-            if(Array.isArray(mealCategoriesData)){
-              setMealCategories(mealCategoriesData);
-            }
-          }).then(()=> setIsLoading(false));
-    },[])
+    const { isLoading, isError, data: mealCategories, error } = useQuery('mealCategories', MealCategoryServer.getMealCategory)
+
 
     return (
         <Container sx={{ bgcolor: '#cfe8fc', height: '95vh', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
