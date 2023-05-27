@@ -8,6 +8,12 @@ export default class UserServer {
             .catch(err => err.message)
     }
 
+    static getUserById(id:number) {
+        return axios.get(`/user/${id}`)
+            .then(response => response.data.user)
+            .catch(err => err.message)
+    }
+
     static login(mail:string, password: string ) {
         return axios.post("/login", { mail, password })
             .then(response => response)

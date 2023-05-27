@@ -34,6 +34,15 @@ export const createUser = async (req: Request, res: Response) => {
     }
 }
 
+export const getUserById = async (req: Request, res: Response) => {
+    try {
+        const user: User = await AppDataSource.getRepository(User).findOneBy({ id: Number(req.params.id) });
+        return res.status(httpStatus.OK).send({ user });
+    } catch (err) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err)
+    }
+}
+
 export const login = async (req: Request, res: Response) => {
     try {
         const user = await AppDataSource.getRepository(User).findOne({ where: { mail: req.body.mail }, select:{

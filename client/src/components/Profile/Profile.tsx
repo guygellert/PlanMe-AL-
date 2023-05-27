@@ -2,20 +2,30 @@ import React, { useEffect, useState } from "react";
 import { Box, Chip, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import MealCategoryServer from "../../serverAPI/mealCategory";
 import { MealCategory } from "../../models/MealCategory";
+import jwtDecode from "jwt-decode";
+import { User } from "../../models/User";
+import { useQuery } from 'react-query'
+import UserServer from "../../serverAPI/user";
 
 const Profile: React.FC = (): JSX.Element => {
+    const currentUserId = jwtDecode<User>(localStorage.getItem('token')|| "")?.id || 1;
     const [categories, setCategories] = useState<string[]>(['Asian', 'Italian']);
-    const [mealCategories, setMealCategories] = useState<MealCategory[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        MealCategoryServer.getMealCategory().then((mealCategoriesData: MealCategory[]) =>{
-            if(Array.isArray(mealCategoriesData)){
-              setMealCategories(mealCategoriesData);
-            }
-          }).then(()=> setIsLoading(false));
-    },[])
+    const { 
+        isLoading: isLoadingMealCategories,
+        isError: isErrorMealCategories, 
+        data: mealCategoriesData, 
+        error: errorMealCategories 
+    } = useQuery('mealCategories', MealCategoryServer.getMealCategory);
 
+    const { 
+        isLoading: isLoadingUser,
+        isError: isErrorUser, 
+        data: userData, 
+        error: errorUser 
+    } = useQuery('user', () => UserServer.getUserById(currentUserId));
+
+    
     return (
         <Container sx={{ bgcolor: '#cfe8fc', height: '95vh', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
             <Box
@@ -30,11 +40,11 @@ const Profile: React.FC = (): JSX.Element => {
                 alt="The house from the offer."
                 src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
             />
-            <Typography sx={{ fontSize: 30 }}>David Bowie</Typography>
             {
-                isLoading ? 
+                isLoadingMealCategories || isLoadingUser ? 
                 <CircularProgress /> :
                 <>
+                    <Typography sx={{ fontSize: 30 }}>{`${userData.firstName} ${userData.lastName}`}</Typography>
                     <div style={{ display: 'flex', alignItems: 'center', marginTop: 10}}>
                         <Typography sx={{ fontSize: 15, fontFamily: "sans-serif", marginRight: 2}}> Categories </Typography>
                         <Stack direction="row" spacing={1}>
@@ -47,20 +57,23 @@ const Profile: React.FC = (): JSX.Element => {
                     </div>
                     <Typography sx={{ fontSize: 15, fontFamily: "sans-serif", margin: 5}}>Allergies: None</Typography>
                     <FormControl>
-                        {mealCategories && mealCategories.map((mealCategory: MealCategory) => 
-                        <div key={mealCategory.id}>
-                            <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                defaultValue="no"
-                            >
-                                <FormControlLabel value="no" control={<Radio />} label="No" />
-                                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-                            </RadioGroup>
-                        </div>
-                            )}
+                        {
+                            mealCategoriesData &&
+                            mealCategoriesData.map((mealCategory: MealCategory) => 
+                            <div key={mealCategory.id}>
+                                <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    defaultValue="no"
+                                >
+                                    <FormControlLabel value="no" control={<Radio />} label="No" />
+                                    <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                                </RadioGroup>
+                            </div>
+                            )
+                        }
                     </FormControl>
             </>
             }
