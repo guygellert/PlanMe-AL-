@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { DishCategory } from '../models/DishCategory'
+import { Meal as MealType } from "../models/Meal-type"
 
 export default class MealServer {
-    static createMeal(newDishCategory: DishCategory) {
-        return axios.post("/meal", { newDishCategory })
+    static createMeal(newMeal: MealType) {
+        return axios.post("/meal", { newMeal })
             .then(response => response)
             .catch(err => err.message)
     }

@@ -16,6 +16,9 @@ export class Dish {
     @Column()
     photo: string;
 
+    @Column({nullable: true})
+    isMain: boolean;
+
     @ManyToMany(() => DishCategory)
     @JoinTable()
     DishCategories: DishCategory[];
