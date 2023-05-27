@@ -22,3 +22,10 @@ export const insertDishes = (ListOfDishes:Array<Dish>) => (
     dishBaseQuery()
     .insert(ListOfDishes)
 );
+export const updateDishes = (Dish:Dish,id:number) => (
+    dishBaseQuery()
+    .createQueryBuilder("dish")
+    .andWhere({id})
+    .update(Dish)
+    .execute()
+);
