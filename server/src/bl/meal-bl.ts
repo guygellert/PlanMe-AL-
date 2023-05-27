@@ -1,6 +1,5 @@
-import { Cuisine, DishCategory, Meal, UserMeal, UserPreference } from "../../src/entities";
+import { Meal, UserMeal, UserPreference } from "../../src/entities";
 import AppDataSource from "../../config/ormconfig"
-import nlp from "compromise"
 import { Brackets } from "typeorm";
 
 const mealBase = () => (
@@ -127,4 +126,8 @@ export const insertMeals = (meals: Array<Meal>) => (
     mealBase()
     .insert(meals)
 );
+
+export const createMeal = (meal: Meal) => (
+    mealBase().save(meal)
+)
 

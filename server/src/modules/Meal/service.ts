@@ -3,7 +3,6 @@ export default class Service {
         if(arr.length == 0){
             return false;
         }
-        console.log(subarr.every(el => arr.includes(el)));
         return subarr.every(el => arr.includes(el));
     }
      getPossibleOptions = (arr:any[]) => {

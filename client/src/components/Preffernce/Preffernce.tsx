@@ -44,7 +44,6 @@ const Preffernce = () => {
           }
           UserPreferenceServer.getUserPreference().then((UserPreferenceData) => 
           {
-              console.log(UserPreferenceData)
               if(!UserPreferenceData)
               {
                 return;

@@ -15,7 +15,7 @@ export const getAllDish = () => (
 export const getDishesByType = (isMainDish: boolean) => (
     AppDataSource.getRepository(Dish).find({
         where: {isMain: isMainDish}
-    })  
+    }) 
 )
 
 export const insertDishes = (ListOfDishes:Array<Dish>) => (

@@ -1,10 +1,10 @@
-import React, { Suspense, useState } from "react"
+import React, { useState } from "react"
 import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography } from "@mui/material"
 import { ExpandMore, StarOutline } from "@mui/icons-material"
 import Dish from "./Dish"
 import MealServer from "../../serverAPI/meal"
 import { Meal as MealType } from "../../models/Meal-type"
-// const DishDialog = React.lazy(() => import("./DishDialog"))
+import { Dish as DishType } from "../../models/Dish"
 
 interface MealProps {
     meal: MealType
@@ -12,23 +12,27 @@ interface MealProps {
 
 const Meal: React.FC<MealProps> = ({ meal }) => {
     const [expanded, setExpanded] = useState(false)
-    // const [openDialog, setOpenDialog] = useState(false)
+    const [currMeal, setCurrMeal] = useState(meal)
 
     const handleExpandClick = () => {
         setExpanded(!expanded)
     }
 
     const handleClickIWant = () => {
-        MealServer.updateMealRating(meal.id)
+        MealServer.updateMealRating(currMeal.id!)
     }
 
-    // const handleOpenDialog = () => {
-    //     setOpenDialog(true)
-    // }
+    const handleSwitch = async (selectedDish: DishType) => {
+        const newMeal: MealType = {
+            mainDish: selectedDish.isMain ? selectedDish : currMeal.mainDish,
+            sideDish: selectedDish.isMain ? currMeal.sideDish : selectedDish,
+            rating: 0
+        }
 
-    // const handleCloseDialog = () => {
-    //     setOpenDialog(false)
-    // }
+        const createdMeal = await MealServer.createMeal(newMeal)
+
+        createdMeal.data && setCurrMeal(createdMeal.data)
+    }
 
     return (
         <>
@@ -42,10 +46,10 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
                     title={
                         <Grid container spacing={1}>
                             <Grid item xs={6}>
-                                <Dish dish={meal.mainDish} />
+                                <Dish dish={currMeal.mainDish} handleSwitch={handleSwitch} />
                             </Grid>
                             <Grid item xs={6}>
-                                <Dish dish={meal.sideDish} />
+                                <Dish dish={currMeal.sideDish} handleSwitch={handleSwitch} />
                             </Grid>
                         </Grid>
                     }
@@ -67,18 +71,13 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
                         }
                         title={
                             <>
-                                <Typography>{meal.mainDish.description}</Typography>
-                                <Typography>{meal.sideDish.description}</Typography>
+                                <Typography>{currMeal.mainDish.description}</Typography>
+                                <Typography>{currMeal.sideDish.description}</Typography>
                             </>
                         }
                     />
                 </Collapse>
             </Card>
-            {/* {openDialog &&
-                <Suspense fallback={<div>Loading</div>}>
-                    <DishDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
-                </Suspense>
-            } */}
         </>
     )
 }

@@ -1,7 +1,7 @@
 import { Dish } from "./Dish";
 
 export interface Meal {
-    id: number;
+    id?: number;
     mainDish: Dish;
     sideDish: Dish;
     rating: number;
