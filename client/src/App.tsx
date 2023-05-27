@@ -3,7 +3,13 @@ import { setAuthToken } from "./auth/auth"
 import ReactRouter from "./components/Router/Router"
 import { QueryClient, QueryClientProvider } from "react-query"
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false
+    },
+  },
+});
 
 const App = () => {
   const token = localStorage.getItem("token")
