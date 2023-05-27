@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Avatar, Button, Dialog, DialogActions, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material"
+import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextField } from "@mui/material"
 import { Dish as DishType } from "../../models/Dish"
 import DishServer from "../../serverAPI/dish"
 import { useTheme } from '@mui/material/styles'
@@ -14,13 +14,18 @@ interface DishDialogProps {
 const DishDialog: React.FC<DishDialogProps> = ({ openDialog, dish, handleCloseDialog, handleSwitchClick }) => {
     const theme = useTheme()
     const [dishes, setDishes] = useState<DishType[]>([])
+    const [filteredDishes, setFilteredDishes] = useState<DishType[]>([])
     const [selectedDish, setSelectedDish] = useState<DishType>()
+    const [searchInput, setSearchInput] = useState<string>()
 
     useEffect(() => {
         const getData = async () => {
             const dishes = await DishServer.getDishesByType(dish.isMain)
 
-            dishes.data && setDishes(dishes.data.filter((curr: DishType) => curr.id !== dish.id))
+            const filtered = dishes.data?.filter((curr: DishType) => curr.id !== dish.id)
+
+            dishes.data && setDishes(filtered)
+            dishes.data && setFilteredDishes(filtered)
         }
 
         getData()
@@ -30,11 +35,29 @@ const DishDialog: React.FC<DishDialogProps> = ({ openDialog, dish, handleCloseDi
         setSelectedDish(value)
     }
 
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value
+        const filtered = dishes.filter(dish => dish.name.toLowerCase().includes(value.toLowerCase()))
+
+        setSearchInput(value)
+        setFilteredDishes(filtered)
+    }
+
     return (
         <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
             <DialogTitle>Switch dish</DialogTitle>
-            <List sx={{ pt: 0 }}>
-                {dishes.map(dish => (
+            <DialogContent sx={{ display: "flex", justifyContent: "center" }}>
+                <TextField
+                    fullWidth
+                    label="search dish"
+                    size="small"
+                    value={searchInput}
+                    onChange={handleSearch}
+                    sx={{ marginTop: "0.3em" }}
+                />
+            </DialogContent>
+            <List sx={{ pt: 0, maxHeight: "50vh", overflow: "auto" }}>
+                {filteredDishes.map(dish => (
                     <ListItem key={dish.id} disableGutters
                         sx={{ backgroundColor: selectedDish?.id === dish.id ? theme.palette.primary.light : "white" }}>
                         <ListItemButton key={dish.id} onClick={() => handleListItemClick(dish)}>
