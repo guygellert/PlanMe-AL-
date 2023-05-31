@@ -9,7 +9,7 @@ export default class UserPreferenceServer {
     }
 
     static getUserPreference() {
-        return axios.get("/userPreference")
+        return axios.get(`/userPreference`)
             .then(response => response.data.userPreference)
             .catch(err => err.message)
     }

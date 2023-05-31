@@ -6,6 +6,7 @@ import jwtDecode from "jwt-decode";
 import { User } from "../../models/User";
 import { useQuery } from 'react-query'
 import UserServer from "../../serverAPI/user";
+import UserPreferenceServer from "../../serverAPI/userPreference";
 
 const Profile: React.FC = (): JSX.Element => {
     const currentUserId = jwtDecode<User>(localStorage.getItem('token')|| "")?.id || 1;
@@ -25,6 +26,14 @@ const Profile: React.FC = (): JSX.Element => {
         error: errorUser 
     } = useQuery('user', () => UserServer.getUserById(currentUserId));
 
+    const {
+        isLoading: isLoadingPreferences,
+        isError: isErrorPreferences, 
+        data: preferences,
+        error: errorPreferences
+    } = useQuery(['preferences', currentUserId], UserPreferenceServer.getUserPreference);
+
+    console.log(preferences);
     
     return (
         <Container sx={{ bgcolor: '#cfe8fc', height: '95vh', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
@@ -41,7 +50,7 @@ const Profile: React.FC = (): JSX.Element => {
                 src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
             />
             {
-                isLoadingMealCategories || isLoadingUser ? 
+                isLoadingMealCategories || isLoadingUser || isLoadingPreferences ? 
                 <CircularProgress /> :
                 <>
                     <Typography sx={{ fontSize: 30 }}>{`${userData.firstName} ${userData.lastName}`}</Typography>
@@ -49,8 +58,8 @@ const Profile: React.FC = (): JSX.Element => {
                         <Typography sx={{ fontSize: 15, fontFamily: "sans-serif", marginRight: 2}}> Categories </Typography>
                         <Stack direction="row" spacing={1}>
                             {
-                                categories?.map((category: string) => 
-                                    <Chip label={category} color="primary" variant="outlined" />
+                                preferences.cuisines?.map((cuisine: {id: number, description: string}) => 
+                                    <Chip key={cuisine.id} label={cuisine.description} color="primary" variant="outlined" />
                                 )
                             }
                         </Stack>
@@ -61,7 +70,7 @@ const Profile: React.FC = (): JSX.Element => {
                             mealCategoriesData &&
                             mealCategoriesData.map((mealCategory: MealCategory) => 
                             <div key={mealCategory.id}>
-                                <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
+                                <FormLabel id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
