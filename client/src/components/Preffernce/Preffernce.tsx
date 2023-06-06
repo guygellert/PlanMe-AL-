@@ -101,12 +101,18 @@ const noValue = (idValue:number) =>
 
 const returnValue = (idFind:number) => 
 {
-  console.log(userPreffernce.mealCategories)
+  if(userPreffernce instanceof Object == false){
+    return []
+  }
   let booleanValue =  userPreffernce.mealCategories.findIndex((prefMealCat) => {return prefMealCat.id == idFind}) >= 0;
   return booleanValue;
 }
 const getOptionsListCuisines = () => {
   let currentCuisinesList = cuisines;
+  console.log(userPreffernce)
+  if(userPreffernce instanceof Object == false){
+    return []
+  }
   userPreffernce?.cuisines.forEach((prefCuis) =>
   {
     currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id != prefCuis.id});
@@ -116,6 +122,9 @@ const getOptionsListCuisines = () => {
 
 const getOptionsListDishes = () => {
   let currentCuisinesList = dishCategories;
+  if(userPreffernce instanceof Object == false){
+    return []
+  }
   userPreffernce?.dishCategories.forEach((prefCuis) =>
   {
     currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id != prefCuis.id});

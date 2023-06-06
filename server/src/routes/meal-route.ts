@@ -1,9 +1,11 @@
 import AppDataSource from '../../config/ormconfig';
 import { Router } from "express";
 import nlp from "compromise"
-import { getTopMeals, getMealById, getMealBySearch, updateMeal, createMeal } from '../bl/meal-bl';
+import { getTopMeals, getMealById, getMealBySearch, updateMeal, createMeal,getUserMealById, updateUserMeal} from '../bl/meal-bl';
 import MealService from "../modules/Meal/service";
 import { Meal } from '../entities/Meal';
+import {User} from "../entities/User";
+import { UserMeal } from '../entities';
 const mealRouter = Router();
 
 mealRouter.get('/', async (req, resp) => {
@@ -30,12 +32,20 @@ mealRouter.get('/filterById/:id', async (req, resp) => {
 mealRouter.put('/updateRating/:id', async (req, resp) => {
     const { id } = req.params;
     const meal = await getMealById(parseInt(id));
-
+    let userMeal:UserMeal = await getUserMealById(parseInt(id),req.user.id);
     if (!meal) {
         resp.status(404).json({ message: 'Meal not found' });
     } else {
         meal.rating = meal.rating + 1;
         await updateMeal(meal, meal.id);
+        if(!userMeal){
+            userMeal = new UserMeal();
+            userMeal.meal = meal;            
+            userMeal.user = await AppDataSource.getRepository(User).findOneBy({ id: Number(req.user.id) });
+            userMeal.rating = 0;
+        }
+        userMeal.rating++;
+        await updateUserMeal(userMeal);
         resp.json({ meal });
     }
 })

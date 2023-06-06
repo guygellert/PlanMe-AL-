@@ -46,6 +46,9 @@ const Home: React.FC = () => {
 
     const shownMeals = (topMealList:MealType[],activeIndex:number) =>{
       let showItem:MealType[] = []
+      if(!Array.isArray(topMealList)){
+        return [] ;
+      }
       topMealList.forEach((value,index) =>{
         if( index >= activeIndex && index <= activeIndex + 2){
           showItem.push(value);

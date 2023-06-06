@@ -103,6 +103,19 @@ const getMealsByUserPreference = async (userId: number, description: string) => 
     return mealPrioritize(mealsBysearch,dishCategories,cuisines);
 }
 
+
+const userMealsBase = () => (
+    AppDataSource.getRepository(UserMeal)
+    .createQueryBuilder("UserMeal")
+    .leftJoin("UserMeal.user", "user")
+    .leftJoinAndSelect("UserMeal.meal", "meal")
+    
+    .innerJoinAndSelect('meal.mainDish', 'mainDish')
+    .innerJoinAndSelect('meal.sideDish', 'sideDish')
+    .leftJoinAndSelect('mainDish.cuisines', 'cuisinesMain')
+    .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
+)
+
 const userMeals = (userId: number, description: string) => (
     AppDataSource.getRepository(UserMeal)
     .createQueryBuilder("UserMeal")
@@ -127,6 +140,16 @@ export const updateMeal = (meal: Meal,id:number) => (
     .update(meal)
     // .set({rating:meal.rating})
     .execute()
+);
+export const getUserMealById = (mealId: number,userId:number) => (
+    userMealsBase()
+    .andWhere("user.id = :userId",{userId})
+    .andWhere("meal.id = :mealId",{mealId})
+    .getOne()
+);
+export const updateUserMeal = (meal: UserMeal) => (
+    AppDataSource.getRepository(UserMeal)
+    .save(meal)
 );
 export const insertMeals = (meals: Array<Meal>) => (
     mealBase()
