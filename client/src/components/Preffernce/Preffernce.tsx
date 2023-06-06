@@ -18,6 +18,7 @@ const Preffernce = () => {
   const currentUser = jwtDecode<User>(localStorage.getItem('token')|| "");
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
   const [mealCategories, setMealCategories] = useState<MealCategory[]>([]);
+  const [mealCategoriesSign, setMealCategoriesSign] = useState<MealCategory[]>([]);
   const [dishCategories, setDishCategories] = useState<DishCategory[]>([]);
   const [userPreffernce, setUserPreffernce] = useState<UserPreferences>({id: 0, user: currentUser, cuisines:[], dishCategories:[], mealCategories:[]});
 
@@ -54,12 +55,35 @@ const Preffernce = () => {
       });
     })
   }, []);
+
+const extractValue = (value:string) => 
+{
+  let valueSub
+  if(value.indexOf('N') >= 0){
+    valueSub = value.substring(0,value.length - 1);
+    return valueSub
+  }
+  return value;
+}
 const 
-handleValueChange = (field: keyof(UserPreferences),ind:string = "I") => (event: React.SyntheticEvent<Element, Event>,value:any) => {
+handleValueChange = (field: keyof(UserPreferences),idSelect:number = -1) => (event: React.SyntheticEvent<Element, Event>,value:any) => {
   event.preventDefault();
-  if(!userPreffernce)
-  return;
-   
+  let booleanValue = value;
+  
+  if(field == 'mealCategories' && userPreffernce.mealCategories)
+  {
+    let mealCatPref:MealCategory = {id:-1,description:""};
+    mealCatPref.id = idSelect;
+    value = userPreffernce.mealCategories;
+    if(booleanValue == "true")
+    {
+      value.push(mealCatPref);
+    }
+    else if(value.findIndex((v:any) => { return v.id != idSelect } ) >= 0)
+    {
+       value = value.filter((val:any) => { return val.id != idSelect})
+    }
+  }
 
   setUserPreffernce(prev => ({
       ...prev,
@@ -70,23 +94,33 @@ const handleSave = async () => {
   UserPreferenceServer.updateUserPreference(userPreffernce);
 
 }
+const noValue = (idValue:number) =>
+{
+    return idValue * -1;
+}
 
 const returnValue = (idFind:number) => 
 {
-  if(!userPreffernce)
-  return;
-  let mealCat;
-    mealCat = userPreffernce?.mealCategories.find((PrefMealCat) =>{
-      if(PrefMealCat.id == idFind)
-      {
-        return PrefMealCat.id
-      }
-    });
-    if(mealCat){
-      return mealCat.id;
-    }
-    return "";
-  
+  console.log(userPreffernce.mealCategories)
+  let booleanValue =  userPreffernce.mealCategories.findIndex((prefMealCat) => {return prefMealCat.id == idFind}) >= 0;
+  return booleanValue;
+}
+const getOptionsListCuisines = () => {
+  let currentCuisinesList = cuisines;
+  userPreffernce?.cuisines.forEach((prefCuis) =>
+  {
+    currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id != prefCuis.id});
+  })
+  return currentCuisinesList;
+}
+
+const getOptionsListDishes = () => {
+  let currentCuisinesList = dishCategories;
+  userPreffernce?.dishCategories.forEach((prefCuis) =>
+  {
+    currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id != prefCuis.id});
+  })
+  return currentCuisinesList;
 }
     return (
         <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "7em" }}>
@@ -97,7 +131,7 @@ const returnValue = (idFind:number) =>
             <Autocomplete
         multiple
         id="tags-outlined"
-        options={cuisines}
+        options={getOptionsListCuisines()}
         getOptionLabel={(option) => option.description}
         filterSelectedOptions
         value={userPreffernce?.cuisines || []}
@@ -112,7 +146,7 @@ const returnValue = (idFind:number) =>
           <Autocomplete
         multiple
         id="tags-outlined"
-        options={dishCategories}
+        options={getOptionsListDishes()}
         value={userPreffernce?.dishCategories || []}
         onChange={handleValueChange("dishCategories")}
         getOptionLabel={(option) => option.description}
@@ -133,13 +167,13 @@ const returnValue = (idFind:number) =>
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
-        onChange={handleValueChange("mealCategories")}
+        onChange={handleValueChange("mealCategories",mealCategory.id)}
         value={returnValue(mealCategory.id)}
         // userPreffernce.mealCategories[mealCategory.id]}
         // defaultValue={mealCategory.id}
       >
-        <FormControlLabel value=""  control={<Radio />} label="No" />
-        <FormControlLabel  value={mealCategory.id}  control={<Radio />} label="Yes" />
+        <FormControlLabel value="false"  control={<Radio />} label="No" />
+        <FormControlLabel  value="true"  control={<Radio />} label="Yes" />
       </RadioGroup>
       </div>
           )}

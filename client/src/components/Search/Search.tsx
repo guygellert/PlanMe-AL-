@@ -24,6 +24,7 @@ const Search: React.FC = () => {
     <><form className="centerForm">
         <div className="inputRounded">
           <TextField
+            className="textFieldClass"
             id="search-bar"
             onChange={(e) => {
               setSearchQuery(e.target.value);
@@ -37,7 +38,7 @@ const Search: React.FC = () => {
         <IconButton onClick={(e) => {
             e.preventDefault();
             extentiveSearch()}} type="submit" aria-label="search">
-          <SearchIcon style={{ fill: "blue" }} />
+          <SearchIcon style={{ fill: "white" }} />
         </IconButton>
         <SpeechButton setSearchQuery={setSearchQuery}></SpeechButton>
       </form>

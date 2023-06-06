@@ -8,12 +8,14 @@ export const userPreferenceBaseQuery = () => (
     .leftJoinAndSelect('userPreference.dishCategories','dishCategories')
     .leftJoinAndSelect('userPreference.mealCategories','mealCategories')
 );
-export const getUserPreferenceById = (id:number) =>(
+export const getUserPreferenceById = (userId:number) =>(
     userPreferenceBaseQuery()
-    .andWhere('userId = :id',{id})
+    .where("userPreference.user.id = :userId",{userId})
+    .getOne()
 );
-export const updateNewUserPreference = (userPreference: UserPreference) =>(
-    userPreferenceBaseQuery()
-    .update(userPreference)
-    .execute()
+export const updateNewUserPreference = (userPreference: UserPreference,userId:number) =>(
+    AppDataSource.getRepository(UserPreference)
+    .save(userPreference)
+    // .where("userPreference.user.id = :userId", { userId })
+    // .execute()
 )
