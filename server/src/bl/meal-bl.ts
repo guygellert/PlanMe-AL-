@@ -10,10 +10,13 @@ const mealBaseQuery = () => (
         .createQueryBuilder('meal')
         .innerJoinAndSelect('meal.mainDish', 'mainDish')
         .innerJoinAndSelect('meal.sideDish', 'sideDish')
+
 );
 
 export const getTopMeals = (maxRows: number) => (
     mealBaseQuery()
+    .leftJoinAndSelect('mainDish.cuisines', 'cuisinesMain')
+    .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
         .orderBy('meal.rating', 'DESC')
         .take(maxRows)
         .getMany()
@@ -85,9 +88,9 @@ const getMealsByUserPreference = async (userId: number, description: string) => 
     const mealsBysearch = await mealBaseQuery()
         .leftJoinAndSelect('meal.MealCategories', 'MealCategories')
         .leftJoinAndSelect('mainDish.DishCategories', 'DishCategoriesMain')
-        .leftJoinAndSelect('mainDish.cuisines', 'cuisinesMain')
+        .leftJoinAndSelect('mainDish.Cuisines', 'cuisinesMain')
         .leftJoinAndSelect('sideDish.DishCategories', 'DishCategoriesSide')
-        .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
+        .leftJoinAndSelect('sideDish.Cuisines', 'cuisinesSide')
         .where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
@@ -105,8 +108,11 @@ const userMeals = (userId: number, description: string) => (
     .createQueryBuilder("UserMeal")
     .leftJoin("UserMeal.user", "user")
     .leftJoinAndSelect("UserMeal.meal", "meal")
+    
     .innerJoinAndSelect('meal.mainDish', 'mainDish')
     .innerJoinAndSelect('meal.sideDish', 'sideDish')
+    .leftJoinAndSelect('mainDish.cuisines', 'cuisinesMain')
+    .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
     .where("user.id = :userId", { userId })
     .andWhere(new Brackets(qb => {
         qb.where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })

@@ -4,6 +4,10 @@
 .inputRounded .MuiOutlinedInput-root {
     border-radius: 20px;
   }
+  .textFieldClass{
+    border-radius: 100px;
+    background-color: white;
+}
 
 /* .columnSearchBar{
     display: "flex";

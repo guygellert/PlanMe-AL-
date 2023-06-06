@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material'
+import { AppBar,Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { Link } from 'react-router-dom'
-
+import "./Navbar.css"
 const Navbar = () => {
     const [openDrawer, setOpenDrawer] = useState(false)
 
@@ -37,7 +37,7 @@ const Navbar = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" color="secondary">
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -49,6 +49,9 @@ const Navbar = () => {
                     >
                         <MenuIcon />
                     </IconButton>
+                    {/* <div className="backgroundLogo" > */}
+                        <img className="backgroundLogo" alt="Logo" src="PLAN-MEAL-LOGO.png"/>
+                    {/* </div> */}
                 </Toolbar>
             </AppBar>
             <React.Fragment>

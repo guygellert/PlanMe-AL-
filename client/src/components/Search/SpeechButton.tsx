@@ -56,8 +56,8 @@ const SpeechButton:React.FC<SearchButtonProps> = ({setSearchQuery}) => {
       
     return (
             <IconButton aria-label="speech" onClick={onClick} ref={microphoneRef}>
-                {!isListening && (<Mic style={{ fill: "blue" }} />) }
-                {isListening && (<MicOff style={{ fill: "blue" }} />) }
+                {!isListening && (<Mic style={{ fill: "white" }} />) }
+                {isListening && (<MicOff style={{ fill: "white" }} />) }
             </IconButton>
   )
     }

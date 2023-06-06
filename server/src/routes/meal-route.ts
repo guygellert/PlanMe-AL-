@@ -7,7 +7,7 @@ import { Meal } from '../entities/Meal';
 const mealRouter = Router();
 
 mealRouter.get('/', async (req, resp) => {
-    const meal = await getTopMeals(100);
+    const meal = await getTopMeals(200);
 
     if (!meal) {
         resp.status(404).json({ message: 'Meal not found' });
@@ -68,7 +68,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 })
 
 mealRouter.get('/top', async (req, resp) => {
-    const topMeals = await getTopMeals(15);
+    const topMeals = await getTopMeals(300);
     resp.json(topMeals);
 })
 

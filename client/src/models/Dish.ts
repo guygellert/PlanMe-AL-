@@ -6,5 +6,5 @@ export interface Dish {
     description: string;
     photo: string;
     isMain: boolean;
-    cuisine: Cuisine;
+    cuisines: Cuisine;
 }

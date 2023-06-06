@@ -2,6 +2,7 @@ import React, { useState, Suspense } from "react"
 import { Card, CardHeader, CardMedia, IconButton } from "@mui/material"
 import { MoreVert } from "@mui/icons-material"
 import { Dish as DishType } from "../../models/Dish"
+import "./Dish.css"
 const DishDialog = React.lazy(() => import("./DishDialog"))
 
 interface DishProps {
@@ -28,13 +29,14 @@ const Dish: React.FC<DishProps> = ({ dish, handleSwitch }) => {
     return (
         <>
             <Card>
-                <CardHeader
+                <CardHeader 
                     action={
                         <IconButton onClick={handleOpenDialog}>
                             <MoreVert />
                         </IconButton>
                     }
-                    title={dish.name}
+                    title={(dish.name.length > 7 && dish.name.length - 7 >3  )?dish.name.substring(0,6) + '...':dish.name}
+                    titleTypographyProps={{variant:'h5' }}
                 />
                 <CardMedia
                     component="img"

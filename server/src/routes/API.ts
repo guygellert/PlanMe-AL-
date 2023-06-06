@@ -133,9 +133,11 @@ router.get('/dishes/modify/:letter', async (req: Request, res: Response) => {
                         newDish = ListOfExistDishes.find((dishFind) => { return dishFind.name.toLowerCase() == meal.strMeal.toLowerCase() })
                         newDish.name = meal.strMeal;
                         newDish.description = meal.strMeal;
-                        newDish.isMain = (meal.strCategory == 'Dessert' ||
-                                          meal.strCategory == 'Side' ||
-                                          meal.strCategory == 'Starter')?false:true;
+                        newDish.isMain = (
+                            // meal.strCategory == 'Dessert' ||
+                                          meal.strCategory == 'Side' 
+                                        //   meal.strCategory == 'Starter'
+                                          )?false:true;
                         // newDish.photo = '/' + meal.strMeal.split(" ").join('-');
                         // newDish.photo = newDish.photo + ".jpg"
                         newDish.cuisines = ListOfExistCuisines.find((cuisine) =>{ return cuisine.description.toLowerCase() == meal.strArea.toLowerCase()})
