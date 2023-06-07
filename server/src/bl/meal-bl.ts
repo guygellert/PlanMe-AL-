@@ -85,22 +85,28 @@ const getMealsByUserPreference = async (userId: number, description: string) => 
     const dishCategories = (userPreferences && userPreferences.dishCategories)?.map(dish => dish.id)
     const cuisines = ( userPreferences && userPreferences.cuisines)?.map(cuisine => cuisine.id)
 
-    const mealsBysearch = await mealBaseQuery()
+    let mealsBysearchQuery =  mealBaseQuery()
         .leftJoinAndSelect('meal.MealCategories', 'MealCategories')
         .leftJoinAndSelect('mainDish.DishCategories', 'DishCategoriesMain')
-        .leftJoinAndSelect('mainDish.Cuisines', 'cuisinesMain')
+        .leftJoinAndSelect('mainDish.cuisines', 'cuisinesMain')
         .leftJoinAndSelect('sideDish.DishCategories', 'DishCategoriesSide')
-        .leftJoinAndSelect('sideDish.Cuisines', 'cuisinesSide')
+        .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
         .where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
-        // .andWhere('MealCategories.id IN (:...MealCategoriesIds)', { MealCategoriesIds: mealCategories })
+
+        if(mealCategories.length){
+            mealsBysearchQuery = mealsBysearchQuery
+            .andWhere('MealCategories.id IN (:...MealCategoriesIds)', { MealCategoriesIds: mealCategories })   
+        }
+
+        const result = await mealsBysearchQuery
         .orderBy('meal.rating', 'DESC')
         .getMany();
 
 
-    return mealPrioritize(mealsBysearch,dishCategories,cuisines);
+    return mealPrioritize(result,dishCategories,cuisines);
 }
 
 

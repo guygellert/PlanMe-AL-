@@ -84,14 +84,7 @@ const Home: React.FC = () => {
           padding: 20
         }}
       >
-      <Card >
-        <div style={{ position: "relative" }}>
-          
-          <CardMedia  style={{ height: "250px", paddingTop: "2%" }} component="img" image="https://westcoastfood.ca/wp-content/uploads/2023/01/pexels-alberta-studios-10480246-scaled.jpg" title="Pancakes" alt="Pancakes"/> 
-        <div style={{position: "absolute", color: "white",top: "50%",left: "50%",transform: "translateX(-50%)",}}> <Search/></div>
-      </div>
-</Card>
-
+         <Search/>
         <h2 className="titleCuisine">Most loved</h2>
         <Stack direction="row" spacing={2}>
         
