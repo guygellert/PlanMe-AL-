@@ -6,6 +6,7 @@ import Registration from "../Login/Registration";
 import Preffernce from "../Preffernce/Preffernce";
 import Navbar from "./Navbar";
 import Profile from "../Profile/Profile";
+import FavoriteMeals from "../Favorite/Favorite";
 
 interface RouteProps {
     children: JSX.Element
@@ -56,6 +57,11 @@ const ReactRouter = () => {
                 <Route path="/profile" element={
                     <ProtectedRoute>
                         <Profile />
+                    </ProtectedRoute>
+                } />
+                <Route path="/favoriteMeals" element={
+                    <ProtectedRoute>
+                        <FavoriteMeals />
                     </ProtectedRoute>
                 } />
                 <Route path="/pref" element={

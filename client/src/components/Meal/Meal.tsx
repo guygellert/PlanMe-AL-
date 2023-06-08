@@ -1,16 +1,24 @@
 import React, { useState } from "react"
 import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography } from "@mui/material"
-import { ExpandMore, StarOutline } from "@mui/icons-material"
+import { ExpandMore, StarOutline, Star } from "@mui/icons-material"
 import Dish from "./Dish"
 import MealServer from "../../serverAPI/meal"
 import { Meal as MealType } from "../../models/Meal-type"
 import { Dish as DishType } from "../../models/Dish"
+import { User } from "../../models/User"
+import jwtDecode from "jwt-decode"
+import { UserFavorite as UserFavoriteType } from "../../models/UserFavorite"
+import UserFavoriteServer from "../../serverAPI/userFavorite"
 
 interface MealProps {
-    meal: MealType
+    meal: MealType,
+    isFavorite?: boolean,
+    favoritesPage?: boolean,
+    updateAfterSaveFavorite: (mealId: number) => void
 }
 
-const Meal: React.FC<MealProps> = ({ meal }) => {
+const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfterSaveFavorite }) => {
+    const currentUser = jwtDecode<User>(localStorage.getItem('token') || "").id
     const [expanded, setExpanded] = useState(false)
     const [currMeal, setCurrMeal] = useState(meal)
 
@@ -34,22 +42,38 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
         createdMeal.data && setCurrMeal(createdMeal.data)
     }
 
+    const handleFavorite = async () => {
+        // if already in favorites remove meal
+        if (isFavorite) {
+            UserFavoriteServer.deleteUserFavorite(currentUser!, currMeal.id!)
+        } else {
+            const newUserFavorite: UserFavoriteType = {
+                userId: currentUser!,
+                mealId: currMeal.id!
+            }
+
+            UserFavoriteServer.createUserFavorite(newUserFavorite)
+        }
+
+        updateAfterSaveFavorite(currMeal.id!)
+    }
+
     return (
         <>
             <Card sx={{ marginTop: "1em" }}>
                 <CardHeader
                     action={
-                        <IconButton>
-                            <StarOutline />
+                        <IconButton onClick={handleFavorite}>
+                            {isFavorite ? <Star style={{ color: "#faaf00" }} /> : <StarOutline />}
                         </IconButton>
                     }
                     title={
                         <Grid container spacing={1}>
                             <Grid item xs={6}>
-                                <Dish dish={currMeal.mainDish} handleSwitch={handleSwitch} />
+                                <Dish dish={currMeal.mainDish} favoritesPage={favoritesPage} handleSwitch={handleSwitch} />
                             </Grid>
                             <Grid item xs={6}>
-                                <Dish dish={currMeal.sideDish} handleSwitch={handleSwitch} />
+                                <Dish dish={currMeal.sideDish} favoritesPage={favoritesPage} handleSwitch={handleSwitch} />
                             </Grid>
                         </Grid>
                     }
@@ -64,7 +88,7 @@ const Meal: React.FC<MealProps> = ({ meal }) => {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardHeader
-                        action={
+                        action={!favoritesPage &&
                             <Button onClick={handleClickIWant} variant="contained" sx={{ marginTop: "1em" }}>
                                 I want this meal
                             </Button>

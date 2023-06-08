@@ -7,10 +7,11 @@ const DishDialog = React.lazy(() => import("./DishDialog"))
 
 interface DishProps {
     dish: DishType,
+    favoritesPage?: boolean,
     handleSwitch: (selectedDish: DishType) => Promise<void>
 }
 
-const Dish: React.FC<DishProps> = ({ dish, handleSwitch }) => {
+const Dish: React.FC<DishProps> = ({ dish, favoritesPage, handleSwitch }) => {
     const [openDialog, setOpenDialog] = useState(false)
 
     const handleOpenDialog = () => {
@@ -29,14 +30,14 @@ const Dish: React.FC<DishProps> = ({ dish, handleSwitch }) => {
     return (
         <>
             <Card>
-                <CardHeader 
-                    action={
+                <CardHeader
+                    action={!favoritesPage &&
                         <IconButton onClick={handleOpenDialog}>
                             <MoreVert />
                         </IconButton>
                     }
-                    title={(dish.name.length > 7 && dish.name.length - 7 >3  )?dish.name.substring(0,6) + '...':dish.name}
-                    titleTypographyProps={{variant:'h5' }}
+                    title={(dish.name.length > 7 && dish.name.length - 7 > 3) ? dish.name.substring(0, 6) + '...' : dish.name}
+                    titleTypographyProps={{ variant: 'h5' }}
                 />
                 <CardMedia
                     component="img"
