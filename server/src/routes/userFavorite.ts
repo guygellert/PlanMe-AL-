@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createUserFavorite, deleteUserFavorites, getUserFavorites } from "../bl/user-favorite-bl";
+import { createUserMeal, getUserMeal } from "../bl/user-meal-bl";
 
 const userFavoriteRouter = Router();
 
@@ -19,6 +20,17 @@ userFavoriteRouter.post('/', async (req, resp) => {
     if (!userFavorite) {
         resp.status(404).json({ message: 'Create user favorite meal failed' })
     } else {
+        let newUserMeal
+        const userMeal = await getUserMeal(userFavorite.user.id, userFavorite.meal.id)
+
+        if (userMeal) {
+            newUserMeal = { id: userMeal.id, userId: userFavorite.user.id, mealId: userFavorite.meal.id, rating: userMeal.rating + 1 }
+        } else {
+            newUserMeal = { userId: userFavorite.user.id, mealId: userFavorite.meal.id, rating: 1 }
+        }
+
+        createUserMeal(newUserMeal)
+
         resp.json(userFavorite)
     }
 })
@@ -29,6 +41,18 @@ userFavoriteRouter.delete('/', async (req, resp) => {
     if (!deleted) {
         resp.status(404).json({ message: 'Delete user favorite meal failed' })
     } else {
+        const userMeal = await getUserMeal(Number(req.body.userId), Number(req.body.mealId))
+
+        if (userMeal) {
+            if (userMeal.rating > 0)
+                createUserMeal({
+                    id: userMeal.id,
+                    userId: Number(req.body.userId),
+                    mealId: Number(req.body.mealId),
+                    rating: userMeal.rating - 1
+                })
+        }
+
         resp.json(deleted)
     }
 })

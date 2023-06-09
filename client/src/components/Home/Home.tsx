@@ -20,12 +20,13 @@ const Home: React.FC = () => {
   const [shownMealList, setShownMealList] = useState<MealType[]>([]);
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
   const [favoriteMeals, setFavoriteMeals] = useState<Set<number>>(new Set())
+  const [render, setRender] = useState<boolean>(false)
 
   useEffect(() => {
     const getData = async () => {
       const favoriteMeals = await UserFavoriteServer.getMeals(currentUser!)
 
-      const mealIds = favoriteMeals.data.map((userFavorite: any) => userFavorite.meal.id)
+      const mealIds = favoriteMeals.data?.map((userFavorite: any) => userFavorite.meal.id)
       favoriteMeals.data && setFavoriteMeals(new Set(mealIds))
     }
 
@@ -62,6 +63,15 @@ const Home: React.FC = () => {
       prev.has(mealId) ? prev.delete(mealId) : prev.add(mealId)
       return prev
     })
+
+    reRender()
+  }
+
+  const reRender = () => {
+    setRender(true)
+    setTimeout(() => {
+      setRender(false)
+    }, 2000)
   }
 
   const shownMeals = (topMealList: MealType[], activeIndex: number) => {
@@ -69,7 +79,7 @@ const Home: React.FC = () => {
     if (!Array.isArray(topMealList)) {
       return [];
     }
-    topMealList.forEach((value, index) => {
+    topMealList?.forEach((value, index) => {
       if (index >= activeIndex && index <= activeIndex + 2) {
         showItem.push(value);
       }
@@ -81,7 +91,7 @@ const Home: React.FC = () => {
   const shownMealsByCuisine = (topMealList: MealType[], activeIndex: number, cuisineId: number) => {
     let showItem: MealType[] = []
     let CatItem: MealType[] = []
-    topMealList.forEach((value, index) => {
+    topMealList?.forEach((value, index) => {
       if ((value.mainDish.cuisines.id == cuisineId || value.sideDish.cuisines.id == cuisineId)) {
         CatItem.push(value);
       }

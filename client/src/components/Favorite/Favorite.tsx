@@ -21,7 +21,7 @@ const FavoriteMeals = () => {
     }, [])
 
     const updateAfterSave = (mealId: number) => {
-
+        setMeals(prev => prev.filter(meal => meal.id !== mealId))
     }
 
     return (

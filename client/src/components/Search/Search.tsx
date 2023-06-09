@@ -20,12 +20,13 @@ const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [result, setResult] = useState<MealResult[]>([])
   const [favoriteMeals, setFavoriteMeals] = useState<Set<number>>(new Set())
+  const [render, setRender] = useState<boolean>(false)
 
   useEffect(() => {
     const getData = async () => {
       const favoriteMeals = await UserFavoriteServer.getMeals(currentUser!)
 
-      const mealIds = favoriteMeals.data.map((userFavorite: any) => userFavorite.meal.id)
+      const mealIds = favoriteMeals.data?.map((userFavorite: any) => userFavorite.meal.id)
       favoriteMeals.data && setFavoriteMeals(new Set(mealIds))
     }
 
@@ -37,6 +38,15 @@ const Search: React.FC = () => {
       prev.has(mealId) ? prev.delete(mealId) : prev.add(mealId)
       return prev
     })
+
+    reRender()
+  }
+
+  const reRender = () => {
+    setRender(true)
+    setTimeout(() => {
+      setRender(false)
+    }, 2000)
   }
 
   const extentiveSearch = async () => {
