@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography } from "@mui/material"
+import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography, Snackbar, Alert } from "@mui/material"
 import { ExpandMore, StarOutline, Star } from "@mui/icons-material"
 import Dish from "./Dish"
 import MealServer from "../../serverAPI/meal"
@@ -21,6 +21,8 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
     const currentUser = jwtDecode<User>(localStorage.getItem('token') || "").id
     const [expanded, setExpanded] = useState(false)
     const [currMeal, setCurrMeal] = useState(meal)
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [favorite, setFavorite] = useState(isFavorite)
 
     const handleExpandClick = () => {
         setExpanded(!expanded)
@@ -39,12 +41,17 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
 
         const createdMeal = await MealServer.createMeal(newMeal)
 
-        createdMeal.data && setCurrMeal(createdMeal.data)
+        if (createdMeal.data) {
+            setCurrMeal(createdMeal.data)
+            setFavorite(false)
+        } else {
+            setOpenSnackbar(true)
+        }
     }
 
     const handleFavorite = async () => {
         // if already in favorites remove meal
-        if (isFavorite) {
+        if (favorite) {
             UserFavoriteServer.deleteUserFavorite(currentUser!, currMeal.id!)
         } else {
             const newUserFavorite: UserFavoriteType = {
@@ -56,6 +63,15 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
         }
 
         updateAfterSaveFavorite(currMeal.id!)
+        setFavorite(!favorite)
+    }
+
+    const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpenSnackbar(false)
     }
 
     return (
@@ -64,7 +80,7 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
                 <CardHeader
                     action={
                         <IconButton onClick={handleFavorite}>
-                            {isFavorite ? <Star style={{ color: "#faaf00" }} /> : <StarOutline />}
+                            {favorite ? <Star style={{ color: "#faaf00" }} /> : <StarOutline />}
                         </IconButton>
                     }
                     title={
@@ -102,6 +118,16 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
                     />
                 </Collapse>
             </Card>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={4000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    Meal already exists
+                </Alert>
+            </Snackbar>
         </>
     )
 }
