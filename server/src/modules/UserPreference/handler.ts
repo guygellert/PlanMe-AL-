@@ -33,24 +33,13 @@ export const updateUserPreference = async (req: Request, res: Response) => {
 
 export const getUserPreference = async (req: Request, res: Response) => {
     try {
-        const userPreference = await getUserPreferenceById(req.user.id);
+        console.log(req.params.id);
+        const userPreference = await getUserPreferenceById(Number(req.params.id));
         if(userPreference)
         {
             return res.status(httpStatus.OK).send({ userPreference: userPreference });
         }
         return res.status(httpStatus.NOT_FOUND).send({ userPreference: userPreference });
-        // await AppDataSource.getRepository(UserPreference).findOne({
-        //     relations: {
-        //         cuisines: true,
-        //         mealCategories: true,
-        //         dishCategories: true,
-        //     },
-        //     where: {
-        //         user: {
-        //             id: req.user.id
-        //         }
-        //     }
-        // })
             
         } catch (err) {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err)

@@ -43,7 +43,7 @@ const Preffernce = () => {
           {
             setDishCategories(dishCategoriesData)
           }
-          UserPreferenceServer.getUserPreference().then((UserPreferenceData) => 
+          UserPreferenceServer.getUserPreference(currentUser.id!).then((UserPreferenceData) => 
           {
               if(!UserPreferenceData)
               {
