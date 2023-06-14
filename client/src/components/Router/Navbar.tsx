@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AppBar,Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material'
+import { AppBar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Button } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { Link } from 'react-router-dom'
 import "./Navbar.css"
@@ -21,7 +21,7 @@ const Navbar = () => {
         },
         {
             path: "/pref",
-            text: "Preffernce"
+            text: "Preference"
         }
     ]
 
@@ -35,9 +35,14 @@ const Navbar = () => {
         setOpenDrawer(open)
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("token")
+        window.location.replace("/")
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" color="secondary">
+            <AppBar position="fixed" color="secondary">
                 <Toolbar>
                     <IconButton
                         size="large"
@@ -49,9 +54,9 @@ const Navbar = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    {/* <div className="backgroundLogo" > */}
-                        <img className="backgroundLogo" alt="Logo" src="PLAN-MEAL-LOGO.png"/>
-                    {/* </div> */}
+                    <img className="backgroundLogo" alt="Logo" src="PLAN-MEAL-LOGO.png" />
+                    <div style={{ flexGrow: 1 }}></div>
+                    <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 </Toolbar>
             </AppBar>
             <React.Fragment>

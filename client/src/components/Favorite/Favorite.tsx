@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Grid } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import Meal from "../Meal/Meal"
 import UserFavoriteServer from "../../serverAPI/userFavorite"
 import { User } from "../../models/User"
@@ -25,18 +25,26 @@ const FavoriteMeals = () => {
     }
 
     return (
-        <Grid container>
-            {meals.map(meal => (
-                <Grid item xs={4}>
-                    <Meal
-                        key={meal.id}
-                        meal={meal}
-                        isFavorite
-                        favoritesPage
-                        updateAfterSaveFavorite={updateAfterSave} />
-                </Grid>
-            ))
-            }
+        <Grid container justifyContent="center" sx={{ marginTop: "5em" }}>
+            <Grid item>
+                <Typography variant="h4">My favorite meals</Typography>
+            </Grid>
+            <Grid container>
+                {meals.length ?
+                    meals.map(meal => (
+                        <Grid item xs={4}>
+                            <Meal
+                                key={meal.id}
+                                meal={meal}
+                                isFavorite
+                                favoritesPage
+                                updateAfterSaveFavorite={updateAfterSave} />
+                        </Grid>
+                    ))
+                    :
+                    <Typography variant="h6">Looks like you didn't add anything yet...</Typography>
+                }
+            </Grid>
         </Grid>
     )
 }

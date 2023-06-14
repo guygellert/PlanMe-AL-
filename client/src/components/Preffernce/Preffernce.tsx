@@ -43,7 +43,7 @@ const Preffernce = () => {
           {
             setDishCategories(dishCategoriesData)
           }
-          UserPreferenceServer.getUserPreference().then((UserPreferenceData) => 
+          UserPreferenceServer.getUserPreference(currentUser.id!).then((UserPreferenceData) => 
           {
               if(!UserPreferenceData)
               {
@@ -109,7 +109,6 @@ const returnValue = (idFind:number) =>
 }
 const getOptionsListCuisines = () => {
   let currentCuisinesList = cuisines;
-  console.log(userPreffernce)
   if(userPreffernce instanceof Object == false){
     return []
   }
@@ -135,7 +134,7 @@ const getOptionsListDishes = () => {
         <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "7em" }}>
             <Grid item xs={4}>
         <Card>
-            <CardHeader style={{ textAlign: 'center' }} title="Preffernce Page"></CardHeader>
+            <CardHeader style={{ textAlign: 'center' }} title="Preference Page"></CardHeader>
             <CardContent>
             <Autocomplete
         multiple
@@ -148,7 +147,7 @@ const getOptionsListDishes = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Favorites Dishes"
+            placeholder="Favorite Dishes"
           />
         )}
       />
@@ -163,7 +162,7 @@ const getOptionsListDishes = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Allergnic"
+            placeholder="Allergens"
           />
         )}
       />

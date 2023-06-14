@@ -8,8 +8,8 @@ export default class UserPreferenceServer {
             .catch(err => err.message)
     }
 
-    static getUserPreference() {
-        return axios.get("/userPreference")
+    static getUserPreference(userId: number) {
+        return axios.get(`/userPreference/${userId}`)
             .then(response => response.data.userPreference)
             .catch(err => err.message)
     }
