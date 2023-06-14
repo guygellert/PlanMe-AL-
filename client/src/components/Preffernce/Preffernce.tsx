@@ -135,7 +135,7 @@ const getOptionsListDishes = () => {
         <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "7em" }}>
             <Grid item xs={4}>
         <Card>
-            <CardHeader style={{ textAlign: 'center' }} title="Preffernce Page"></CardHeader>
+            <CardHeader style={{ textAlign: 'center' }} title="Preference Page"></CardHeader>
             <CardContent>
             <Autocomplete
         multiple
@@ -148,7 +148,7 @@ const getOptionsListDishes = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Favorites Dishes"
+            placeholder="Favorite Dishes"
           />
         )}
       />
@@ -163,7 +163,7 @@ const getOptionsListDishes = () => {
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Allergnic"
+            placeholder="Allergens"
           />
         )}
       />

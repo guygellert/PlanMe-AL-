@@ -37,7 +37,7 @@ const Registration: React.FC<RegistrationProps> = ({ handleToken }) => {
                 setAuthToken(token)
                 handleToken(token)
 
-                navigate("/search")
+                navigate("/home")
             }
         } catch {
 
@@ -85,6 +85,7 @@ const Registration: React.FC<RegistrationProps> = ({ handleToken }) => {
                     />
                     <Button
                         variant="contained"
+                        color="secondary"
                         onClick={handleSave}
                         sx={{ width: "100%" }}>
                         Sign up
