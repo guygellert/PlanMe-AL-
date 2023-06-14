@@ -44,7 +44,7 @@ const Profile: React.FC = (): JSX.Element => {
 
 
     return (
-        <Container sx={{ bgcolor: 'antiquewhite', height: '95vh', width: '1000vw', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
+        <Container sx={{ bgcolor: 'antiquewhite', height: '95vh', width: '1000vw', display: 'flex', alignItems: 'center', flexDirection: 'column', marginTop: "3em" }} >
             <Box
                 component="img"
                 sx={{
@@ -93,7 +93,7 @@ const Profile: React.FC = (): JSX.Element => {
                             aria-labelledby="demo-row-radio-buttons-group-label"
                             name="row-radio-buttons-group"
                             defaultValue="no"
-                            value={userPreferences?.mealCategories.find((userMealCategory: MealCategory) => 
+                            value={userPreferences?.mealCategories?.find((userMealCategory: MealCategory) => 
                                 userMealCategory.id === mealCategory.id) ? "yes" : "no"}
                         >
                             <FormControlLabel value="no" control={<Radio />} label="No" />

@@ -36,7 +36,6 @@ router.get('/cuisine/insert/:letter', async (req: Request, res: Response) => {
                         ListOfCuisines.push(newCuisine);
                     }
                 })
-                // console.log(ListOfCuisines)
                 ListOfCuisines = ListOfCuisines.filter((item,index) =>ListOfCuisines.indexOf(item) === index)
                 console.log(ListOfCuisines)
                 insertCuisines(ListOfCuisines);
@@ -93,7 +92,6 @@ router.get('/dishes/insert/:letter', async (req: Request, res: Response) => {
                         ListOfDishes.push(newDish);
                     }
                 })
-                // console.log(ListOfCuisines)
                 console.log(ListOfDishes)
                 insertDishes(ListOfDishes);
             }
@@ -146,8 +144,6 @@ router.get('/dishes/modify/:letter', async (req: Request, res: Response) => {
                         // ListOfDishes.push(newDish);
                     }
                 })
-                // console.log(ListOfCuisines)
-                // console.log(ListOfDishes)
                 // insertDishes(ListOfDishes);
             }
         });
@@ -211,7 +207,6 @@ router.get('/meals/insert/:side', async (req: Request, res: Response) => {
                 })
                     // }
                 })
-                // console.log(ListOfCuisines)
                 console.log(ListOfMeals)
                 insertMeals(ListOfMeals);
             }
