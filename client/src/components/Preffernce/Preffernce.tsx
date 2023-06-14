@@ -43,7 +43,7 @@ const Preffernce = () => {
           {
             setDishCategories(dishCategoriesData)
           }
-          UserPreferenceServer.getUserPreference().then((UserPreferenceData) => 
+          UserPreferenceServer.getUserPreference(currentUser.id!).then((UserPreferenceData) => 
           {
               if(!UserPreferenceData)
               {
@@ -109,7 +109,6 @@ const returnValue = (idFind:number) =>
 }
 const getOptionsListCuisines = () => {
   let currentCuisinesList = cuisines;
-  console.log(userPreffernce)
   if(userPreffernce instanceof Object == false){
     return []
   }
