@@ -6,6 +6,7 @@ import MealService from "../modules/Meal/service";
 import { Meal } from '../entities/Meal';
 import {User} from "../entities/User";
 import { UserMeal } from '../entities';
+import https from 'https';
 const mealRouter = Router();
 
 mealRouter.get('/', async (req, resp) => {
@@ -80,6 +81,21 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 mealRouter.get('/top', async (req, resp) => {
     const topMeals = await getTopMeals(300);
     resp.json(topMeals);
+})
+mealRouter.get('/recepies/:name', async (req, res) => {
+    const { name } = req.params;
+    let data = '';
+    const request = https.get(encodeURI(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`),(response) =>
+    {
+        response.setEncoding('utf8');
+        // As data starts streaming in, add each chunk to "data"
+        response.on('data', (chunk) => { data += chunk; });
+        // The whole response has been received. Print out the result.
+        response.on('end', () => 
+        {
+            return res.send(data);
+        })
+    })
 })
 
 mealRouter.post('/', async (req, resp) => {

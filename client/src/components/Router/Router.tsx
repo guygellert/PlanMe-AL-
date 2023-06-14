@@ -8,7 +8,8 @@ import Navbar from "./Navbar";
 import Profile from "../Profile/Profile";
 import FavoriteMeals from "../Favorite/Favorite";
 import MealPage from "../Meal/MealPage"
-
+import { Meal as MealType } from "../../models/Meal-type"
+import {Dish} from "../../models/Dish";
 interface RouteProps {
     children: JSX.Element
 }
@@ -34,6 +35,9 @@ const LoginRoute: React.FC<RouteProps> = ({ children }) => {
 }
 
 const ReactRouter = () => {
+    // const dish:Dish;
+    // const meal:MealType ={rating:0,id:0,sideDish:null,mainDish:null};
+    // let mealT:MealType = null;
     const [token, setToken] = useState<string | null>(localStorage.getItem("token"))
 
     const handleToken = (token: string) => {

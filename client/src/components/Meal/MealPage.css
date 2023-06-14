@@ -1,0 +1,11 @@
+.centerizeItem{
+justify-content: center;
+justify-items: center;
+text-align: center;
+align-items: center;
+flex: 1;
+}
+.backgroundPage{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),url("../../../public/heroImage.jpg");
+    min-height: 1000px;
+}

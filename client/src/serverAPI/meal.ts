@@ -24,4 +24,9 @@ export default class MealServer {
             .then(response => response.data.meal)
             .catch(err => err.message)
     }
+    static getRecepies(name:string){
+        return axios.get("/meal/recepies/" + name)
+        .then(response => response.data.meals)
+        .catch(err => err.message)
+    }
 }
