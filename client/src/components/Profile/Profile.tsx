@@ -27,7 +27,7 @@ const Profile: React.FC = (): JSX.Element => {
 
     
     return (
-        <Container sx={{ bgcolor: '#cfe8fc', height: '95vh', display: 'flex', alignItems: 'center', flexDirection: 'column' }} >
+        <Container sx={{ bgcolor: '#cfe8fc', height: '95vh', display: 'flex', alignItems: 'center', flexDirection: 'column', marginTop: "3em" }} >
             <Box
                 component="img"
                 sx={{
