@@ -2,7 +2,6 @@ import React from "react"
 import { setAuthToken } from "./auth/auth"
 import ReactRouter from "./components/Router/Router"
 import { QueryClient, QueryClientProvider } from "react-query"
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -18,8 +17,8 @@ const App = () => {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactRouter />
+    <QueryClientProvider client={queryClient} >
+      <ReactRouter  />
     </QueryClientProvider>
   )
 }

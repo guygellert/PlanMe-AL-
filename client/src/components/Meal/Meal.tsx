@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography, Snackbar, Alert } from "@mui/material"
-import { ExpandMore, StarOutline, Star } from "@mui/icons-material"
+import { ExpandMore, StarOutline, Star, Navigation } from "@mui/icons-material"
 import Dish from "./Dish"
 import MealServer from "../../serverAPI/meal"
 import { Meal as MealType } from "../../models/Meal-type"
@@ -9,7 +9,7 @@ import { User } from "../../models/User"
 import jwtDecode from "jwt-decode"
 import { UserFavorite as UserFavoriteType } from "../../models/UserFavorite"
 import UserFavoriteServer from "../../serverAPI/userFavorite"
-
+import {useNavigate} from "react-router-dom"
 interface MealProps {
     meal: MealType,
     isFavorite?: boolean,
@@ -17,19 +17,20 @@ interface MealProps {
     updateAfterSaveFavorite: (mealId: number) => void
 }
 
-const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfterSaveFavorite }) => {
+const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfterSaveFavorite}) => {
     const currentUser = jwtDecode<User>(localStorage.getItem('token') || "").id
     const [expanded, setExpanded] = useState(false)
     const [currMeal, setCurrMeal] = useState(meal)
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [favorite, setFavorite] = useState(isFavorite)
-
+    const navigate = useNavigate();
     const handleExpandClick = () => {
         setExpanded(!expanded)
     }
 
     const handleClickIWant = () => {
         MealServer.updateMealRating(currMeal.id!)
+        navigate('/MealPage',{state:{meal:currMeal}});
     }
 
     const handleSwitch = async (selectedDish: DishType) => {
