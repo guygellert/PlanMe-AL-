@@ -60,6 +60,7 @@ const Login: React.FC<LoginProps> = ({ handleToken }) => {
                     />
                     <Button
                         variant="contained"
+                        color="secondary"
                         onClick={handleLogin}
                         sx={{ width: "100%" }}>
                         Login

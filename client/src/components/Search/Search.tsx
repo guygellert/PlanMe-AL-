@@ -57,7 +57,7 @@ const Search: React.FC = () => {
     <>
       <Card>
         <div style={{ position: "relative" }}>
-          <CardMedia style={{ height: "250px", paddingTop: "2%" }} component="img" image="https://westcoastfood.ca/wp-content/uploads/2023/01/pexels-alberta-studios-10480246-scaled.jpg" title="Pancakes" alt="Pancakes" />
+          <CardMedia style={{ height: "250px", paddingTop: "2%" }} component="img" image="https://westcoastfood.ca/wp-content/uploads/2023/01/pexels-alberta-studios-10480246-scaled.jpg" />
           <div style={{ position: "absolute", color: "white", top: "50%", left: "50%", transform: "translateX(-50%)", }}>
             <form className="centerForm">
               <div className="inputRounded">
