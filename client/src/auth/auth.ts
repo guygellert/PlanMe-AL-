@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axiosInstance from '../serverAPI/axiosInstance'
 import jwt_decode, { JwtPayload } from "jwt-decode"
 
 export const isTokenValid = (token: string) => {
@@ -12,7 +12,7 @@ export const setAuthToken = async (token: string) => {
     if (!isTokenValid(token)) {
         try {
             // token not valid, we need to get a new one
-            const refresh = await axios.post("/refresh_token")
+            const refresh = await axiosInstance.post("/refresh_token")
 
             if (refresh.data) {
                 const newtoken = refresh.data.newToken
@@ -27,7 +27,7 @@ export const setAuthToken = async (token: string) => {
 
     }
     else if (token && isTokenValid(token))
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
     else
-        delete axios.defaults.headers.common["Authorization"]
+        delete axiosInstance.defaults.headers.common["Authorization"]
 }

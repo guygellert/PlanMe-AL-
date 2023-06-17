@@ -65,12 +65,10 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
     let mealList: Meal[] = [];
     // const meal = await getMealBySearch(parseInt(id));
     listMatch = mealService.getPossibleOptions(listOfPossible);
-    console.log(listMatch);
     for (let i = 0; i < listMatch.length; i++) {
         let description = listMatch[i].join(" ");
         if (description.length > 0) {
             const meal = await getMealBySearch(req.user.id, description)
-            console.log(meal);
             mealList = mealList.concat(meal);
             console.log(mealList)
         }

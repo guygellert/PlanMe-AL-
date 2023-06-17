@@ -159,7 +159,6 @@ const MealPage: React.FC = () => {
     const mainDish = location.state.meal.mainDish;
     const sideDish = location.state.meal.sideDish;
     useEffect(() => {
-        console.log(location.state)
         let mealNameMainDish = mainDish.name.split("-").join(" ");
         let mealNameSideDish = sideDish.name.split("-").join(" ");
         MealServer.getRecepies(mealNameMainDish).then((recepiesData)=>{
@@ -201,7 +200,7 @@ const MealPage: React.FC = () => {
                 </div>
                 <Divider></Divider>
                 <div className="centerizeItem">
-                    <h1>Ingredient</h1>
+                    <h1>Ingredients</h1>
                 </div>
                     <FormGroup>
                         {recepieInfo.strIngredient1 != null && recepieInfo.strIngredient1.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient1 + ' - ' + recepieInfo.strMeasure1}></FormControlLabel>}
@@ -228,7 +227,7 @@ const MealPage: React.FC = () => {
                     </FormGroup>
                     <Divider></Divider>
                     <div className="centerizeItem">
-                    <h1>Making Order</h1>
+                    <h1>Preparation method</h1>
                     </div>
                     {recepieInfo.strInstructions.split(".").map((instruct) =>{if(instruct.length > 0) return(
                     <div>

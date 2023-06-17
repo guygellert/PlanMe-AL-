@@ -54,22 +54,22 @@ const mealPrioritize = (meals: Meal[], prefDishCategory: number[], prefCuisines:
     
     const mealsWithPriority = meals.map((meal, index) =>{
         let priority = meal.rating > 0 ? 3*(meals.length - index) : 0;
-        if(meal.mainDish.cuisines && prefCuisines.includes(meal.mainDish.cuisines.id) ){
+        if(meal.mainDish.cuisines && prefCuisines?.includes(meal.mainDish.cuisines.id) ){
             priority += 1;
         }
 
-        if(meal.sideDish.cuisines && prefCuisines.includes(meal.mainDish.cuisines.id) ){
+        if(meal.sideDish.cuisines && prefCuisines?.includes(meal.mainDish.cuisines.id) ){
             priority += 1;
         }
 
         meal.mainDish.DishCategories.forEach(category => {
-            if(prefDishCategory.includes(category.id)){
+            if(prefDishCategory?.includes(category.id)){
                 priority += 1;
             }
         });
 
         meal.sideDish.DishCategories.forEach(category => {
-            if(prefDishCategory.includes(category.id)){
+            if(prefDishCategory?.includes(category.id)){
                 priority += 1;
             }
         });
@@ -96,17 +96,19 @@ const getMealsByUserPreference = async (userId: number, description: string) => 
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
 
-        if(mealCategories.length){
+        if(mealCategories?.length){
             mealsBysearchQuery = mealsBysearchQuery
             .andWhere('MealCategories.id IN (:...MealCategoriesIds)', { MealCategoriesIds: mealCategories })   
         }
 
         const result = await mealsBysearchQuery
         .orderBy('meal.rating', 'DESC')
-        .getMany();
+        .getMany()
+
+        const mealsToReturn = result.length ? mealPrioritize(result,dishCategories,cuisines) : result
 
 
-    return mealPrioritize(result,dishCategories,cuisines);
+    return mealsToReturn
 }
 
 
