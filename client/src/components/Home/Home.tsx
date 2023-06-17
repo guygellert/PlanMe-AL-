@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Meal as MealType } from "../../models/Meal-type";
 import mealServer from "../../serverAPI/meal"
 import "./Home.css";
-import { Grid, IconButton, Stack, Button, Card, CardMedia } from "@mui/material";
+import { Grid, IconButton, Stack, Button } from "@mui/material";
 import ForwardIcon from '@mui/icons-material/ArrowForwardRounded';
 import BackIcon from '@mui/icons-material/ArrowBackRounded';
 import Meal from "../Meal/Meal";
@@ -168,9 +168,9 @@ const Home: React.FC = () => {
       <h2 className="titleCuisine">Most loved</h2>
       <Stack direction="row" spacing={2}>
 
-        <IconButton color="primary" onClick={() => {moveBack(-1)}}><BackIcon /></IconButton >
-        <IconButton color="primary" onClick={() => {moveFowared(-1)}}><ForwardIcon /></IconButton>
-        <Button color="primary" value={-1}  variant="text" onClick={showAll}>More</Button>
+        {activeNumber > 0 && <IconButton color="primary" onClick={() => {moveBack(-1)}}><BackIcon /></IconButton >}
+        {activeNumber < topMeals.length -3 && <IconButton color="primary" onClick={() =>{moveFowared(-1)}}><ForwardIcon /></IconButton>}
+        <Button color="primary" variant="text" onClick={showAll}>More</Button>
       </Stack>
       <Grid className="mealCardCategory" container justifyContent="center" spacing={2} sx={{ overflow: "auto", height: "85vh" }}>
 

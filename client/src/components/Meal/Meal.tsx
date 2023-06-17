@@ -9,7 +9,7 @@ import { User } from "../../models/User"
 import jwtDecode from "jwt-decode"
 import { UserFavorite as UserFavoriteType } from "../../models/UserFavorite"
 import UserFavoriteServer from "../../serverAPI/userFavorite"
-
+import { useNavigate } from "react-router-dom"
 interface MealProps {
     meal: MealType,
     isFavorite?: boolean,
@@ -23,13 +23,14 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
     const [currMeal, setCurrMeal] = useState(meal)
     const [openSnackbar, setOpenSnackbar] = useState(false)
     const [favorite, setFavorite] = useState(isFavorite)
-
+    const navigate = useNavigate();
     const handleExpandClick = () => {
         setExpanded(!expanded)
     }
 
     const handleClickIWant = () => {
         MealServer.updateMealRating(currMeal.id!)
+        navigate('/MealPage', { state: { meal: currMeal } });
     }
 
     const handleSwitch = async (selectedDish: DishType) => {
@@ -104,7 +105,7 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardHeader
-                        action={!favoritesPage &&
+                        action={
                             <Button onClick={handleClickIWant} variant="contained" sx={{ marginTop: "1em" }}>
                                 I want this meal
                             </Button>

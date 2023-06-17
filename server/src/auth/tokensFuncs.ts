@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { User } from "../entities/User"
 import jwt, { verify } from "jsonwebtoken"
-import { ExtractJwt,Strategy  } from "passport-jwt";
+import { ExtractJwt, Strategy } from "passport-jwt";
 import { UserData } from "../utils/types";
 import passport from "passport";
 import AppDataSource from "../../config/ormconfig";
@@ -11,32 +11,32 @@ const jwtOptions = {
   secretOrKey: process.env['ACCESS_SECRET'],
 }
 
-export const JwtStrategy = new Strategy(jwtOptions,async ({email, password},done) => {
-  const loggedUser = await AppDataSource.getRepository(User).findOneBy({mail: email,password: password})
-  if(!loggedUser){
-      return done(new Error('No user found in token'), false);
+export const JwtStrategy = new Strategy(jwtOptions, async (jwt_payload, done) => {
+  const loggedUser = await AppDataSource.getRepository(User).findOneBy({ id: jwt_payload.id })
+  if (!loggedUser) {
+    return done(new Error('No user found in token'), false);
   }
 
-  return done(null,{id: loggedUser.id});
+  return done(null, { id: loggedUser.id });
 })
 
-export const userPassportMiddleware =  (
+export const userPassportMiddleware = (
   req: Request<any, any, any, any>,
   res: Response,
   next: NextFunction) => {
-    passport.authenticate(['userJwt'], { session: false }, async (err:any, user: UserData) => {
-      if(err || !user){
-        res.status(401).json({error:'Invalid user token', err});
-      } else {
-        req.user = user;
-        next()
-      }
-    })(req,res,next);
-  };
+  passport.authenticate(['userJwt'], { session: false }, async (err: any, user: UserData) => {
+    if (err || !user) {
+      res.status(401).json({ error: 'Invalid user token', err });
+    } else {
+      req.user = user;
+      next()
+    }
+  })(req, res, next);
+};
 
 export const generateAccessToken = (user: User) => {
   const accessToken = jwt.sign(
-    { 
+    {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -45,7 +45,7 @@ export const generateAccessToken = (user: User) => {
     process.env.ACCESS_SECRET,
     { expiresIn: "5m" }
   );
-  
+
   return accessToken;
 };
 

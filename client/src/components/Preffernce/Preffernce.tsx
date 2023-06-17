@@ -98,7 +98,6 @@ const returnValue = (idFind:number) =>
 }
 const getOptionsListCuisines = () => {
   let currentCuisinesList = cuisines;
-  console.log(userPreffernce)
   if(userPreffernce instanceof Object == false){
     return []
   }

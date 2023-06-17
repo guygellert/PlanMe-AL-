@@ -25,7 +25,7 @@ const FavoriteMeals = () => {
     }
 
     return (
-        <Grid container justifyContent="center">
+        <Grid container justifyContent="center" sx={{ marginTop: "5em" }}>
             <Grid item>
                 <Typography variant="h4">My favorite meals</Typography>
             </Grid>

@@ -6,10 +6,11 @@ import MealService from "../modules/Meal/service";
 import { Meal } from '../entities/Meal';
 import {User} from "../entities/User";
 import { UserMeal } from '../entities';
+import https from 'https';
 const mealRouter = Router();
 
 mealRouter.get('/', async (req, resp) => {
-    const meal = await getTopMeals(200);
+    const meal = await getTopMeals(1000);
 
     if (!meal) {
         resp.status(404).json({ message: 'Meal not found' });
@@ -64,12 +65,10 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
     let mealList: Meal[] = [];
     // const meal = await getMealBySearch(parseInt(id));
     listMatch = mealService.getPossibleOptions(listOfPossible);
-    console.log(listMatch);
     for (let i = 0; i < listMatch.length; i++) {
         let description = listMatch[i].join(" ");
         if (description.length > 0) {
             const meal = await getMealBySearch(req.user.id, description)
-            console.log(meal);
             mealList = mealList.concat(meal);
             console.log(mealList)
         }
@@ -78,8 +77,23 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 })
 
 mealRouter.get('/top', async (req, resp) => {
-    const topMeals = await getTopMeals(300);
+    const topMeals = await getTopMeals(1000);
     resp.json(topMeals);
+})
+mealRouter.get('/recepies/:name', async (req, res) => {
+    const { name } = req.params;
+    let data = '';
+    const request = https.get(encodeURI(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`),(response) =>
+    {
+        response.setEncoding('utf8');
+        // As data starts streaming in, add each chunk to "data"
+        response.on('data', (chunk) => { data += chunk; });
+        // The whole response has been received. Print out the result.
+        response.on('end', () => 
+        {
+            return res.send(data);
+        })
+    })
 })
 
 mealRouter.post('/', async (req, resp) => {
