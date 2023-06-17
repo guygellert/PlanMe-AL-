@@ -9,7 +9,7 @@ import { User } from "../../models/User"
 import jwtDecode from "jwt-decode"
 import { UserFavorite as UserFavoriteType } from "../../models/UserFavorite"
 import UserFavoriteServer from "../../serverAPI/userFavorite"
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 interface MealProps {
     meal: MealType,
     isFavorite?: boolean,
@@ -17,7 +17,7 @@ interface MealProps {
     updateAfterSaveFavorite: (mealId: number) => void
 }
 
-const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfterSaveFavorite}) => {
+const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfterSaveFavorite }) => {
     const currentUser = jwtDecode<User>(localStorage.getItem('token') || "").id
     const [expanded, setExpanded] = useState(false)
     const [currMeal, setCurrMeal] = useState(meal)
@@ -30,7 +30,7 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
 
     const handleClickIWant = () => {
         MealServer.updateMealRating(currMeal.id!)
-        navigate('/MealPage',{state:{meal:currMeal}});
+        navigate('/MealPage', { state: { meal: currMeal } });
     }
 
     const handleSwitch = async (selectedDish: DishType) => {
@@ -105,7 +105,7 @@ const Meal: React.FC<MealProps> = ({ meal, isFavorite, favoritesPage, updateAfte
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardHeader
-                        action={!favoritesPage &&
+                        action={
                             <Button onClick={handleClickIWant} variant="contained" sx={{ marginTop: "1em" }}>
                                 I want this meal
                             </Button>
