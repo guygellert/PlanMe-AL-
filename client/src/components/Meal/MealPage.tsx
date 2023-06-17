@@ -159,7 +159,6 @@ const MealPage: React.FC = () => {
     const mainDish = location.state.meal.mainDish;
     const sideDish = location.state.meal.sideDish;
     useEffect(() => {
-        console.log(location.state)
         let mealNameMainDish = mainDish.name.split("-").join(" ");
         let mealNameSideDish = sideDish.name.split("-").join(" ");
         MealServer.getRecepies(mealNameMainDish).then((recepiesData)=>{

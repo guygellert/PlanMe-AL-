@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button, Card, CardActions, CardHeader, Collapse, Grid, IconButton, Typography, Snackbar, Alert } from "@mui/material"
-import { ExpandMore, StarOutline, Star, Navigation } from "@mui/icons-material"
+import { ExpandMore, StarOutline, Star } from "@mui/icons-material"
 import Dish from "./Dish"
 import MealServer from "../../serverAPI/meal"
 import { Meal as MealType } from "../../models/Meal-type"
