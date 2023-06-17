@@ -17,6 +17,7 @@ const Home: React.FC = () => {
   interface CuisineActiveNumber {
     id: number;
     activeNumber:number;
+    numberOfItems:number;
 }
   const currentUser = jwtDecode<User>(localStorage.getItem('token') || "").id
   const [topMeals, setTopMeals] = useState<MealType[]>([]);
@@ -43,13 +44,17 @@ const Home: React.FC = () => {
       if (Array.isArray(cuisinesData)) {
         setCuisines(cuisinesData);
         let cuisineActiveNumber:CuisineActiveNumber[] = [];
-        cuisinesData.forEach((cuis) =>{cuisineActiveNumber.push({id:cuis.id,activeNumber:0})});
+        cuisinesData.forEach((cuis) =>{cuisineActiveNumber.push(
+          {id:cuis.id,
+            activeNumber:0,
+            numberOfItems:5 })});
         setActiveNumberList(cuisineActiveNumber)
       }
     });
     mealServer.getTopMeal().then((mealData) => {
       setTopMeals(mealData);
       shownMeals(mealData, activeNumber);
+      console.log(mealData)
     });
   }, [])
 
@@ -63,13 +68,15 @@ const Home: React.FC = () => {
     }
     else{
       let activeNumberNewList = activeNumberList;
-      activeNumberNewList.map((actNumber)=>
+      activeNumberNewList.forEach((actNumber)=>
       { 
         if(actNumber.id == cuisine)
         { 
-          actNumber.activeNumber = actNumber.activeNumber + 3  
-          return actNumber;
+          actNumber.activeNumber = actNumber.activeNumber + 3 
+          actNumber.numberOfItems = getNumberOfItems(cuisine)
+          
         }
+        // return actNumber;
       })
       setActiveNumberList(activeNumberNewList)
       reRender()
@@ -86,12 +93,13 @@ const Home: React.FC = () => {
     }
     else{
       let activeNumberNewList = activeNumberList;
-      activeNumberNewList.map((actNumber)=>
+      activeNumberNewList.forEach((actNumber)=>
       { 
         if(actNumber.id == cuisine)
         { 
           actNumber.activeNumber = actNumber.activeNumber - 3  
-          return actNumber;
+          actNumber.numberOfItems = getNumberOfItems(cuisine)
+          // return actNumber;
         }
       })
       setActiveNumberList(activeNumberNewList)
@@ -136,21 +144,41 @@ const Home: React.FC = () => {
     setShownMealList(showItem)
     return showItem;
   }
-
+  const getNumberOfItems = (cuisineId:number) =>{
+    return topMeals.filter((meal) =>{
+      return meal.mainDish.cuisines.id == cuisineId || meal.sideDish.cuisines.id == cuisineId
+    }).length
+  }
+  const canBeFowared = (cuisineId:number) => {
+    let cuisiActiveNumber = activeNumberList.find((cui) =>{
+      return cui.id == cuisineId
+    });
+    console.log(cuisiActiveNumber)
+    return cuisiActiveNumber && cuisiActiveNumber.activeNumber >= 0 && cuisiActiveNumber?.activeNumber < cuisiActiveNumber?.numberOfItems - 3;
+  }
+  const canBeBack = (cuisineId:number) => {
+    let cuisiActiveNumber = activeNumberList.find((cui) =>{
+      return cui.id == cuisineId
+    });
+    return cuisiActiveNumber && cuisiActiveNumber.activeNumber >= 0 && cuisiActiveNumber?.activeNumber >  0;
+  }
   const shownMealsByCuisine = (topMealList: MealType[], activeIndex: number, cuisineId: number) => {
     let showItem: MealType[] = []
     let CatItem: MealType[] = []
+    console.log("Cuisine: " + cuisineId);
     topMealList?.forEach((value, index) => {
       if ((value.mainDish.cuisines.id == cuisineId || value.sideDish.cuisines.id == cuisineId)) {
         CatItem.push(value);
       }
     });
+    
     CatItem.forEach((value, index) => {
       let currentActiveIndex = activeNumberList.find((act)=> { return act.id == cuisineId});
       if (currentActiveIndex && index >= currentActiveIndex.activeNumber && index <= currentActiveIndex.activeNumber + 2) {
         showItem.push(value);
       }
     });
+    console.log(showItem);
     return showItem;
   }
   return (
@@ -192,8 +220,8 @@ const Home: React.FC = () => {
           <div className="sizeCardClass">
             <h2 className="titleCuisine">{cuis.description}</h2>
             <Stack direction="row" spacing={2}>
-              <IconButton value={cuis.id} color="primary" onClick={() => {moveBack(cuis.id)}}><BackIcon /></IconButton >
-              <IconButton value={cuis.id} color="primary" onClick={() =>{moveFowared(cuis.id)}}><ForwardIcon /></IconButton>
+               {canBeBack(cuis.id) && <IconButton value={cuis.id} color="primary" onClick={() => {moveBack(cuis.id)}}><BackIcon /></IconButton >}
+               {canBeFowared(cuis.id) && <IconButton value={cuis.id} color="primary" onClick={() =>{moveFowared(cuis.id)}}><ForwardIcon /></IconButton>}
               <Button color="primary" value={cuis.id} variant="text" onClick={showAll}>More</Button>
             </Stack>
             <Grid className="mealCardCategory" container justifyContent="center" spacing={2} sx={{ overflow: "auto", height: "85vh" }}>
