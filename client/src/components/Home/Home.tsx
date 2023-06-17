@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Meal as MealType } from "../../models/Meal-type";
 import mealServer from "../../serverAPI/meal"
 import "./Home.css";
-import { Grid, IconButton, Stack, Button, Card, CardMedia } from "@mui/material";
+import { Grid, IconButton, Stack, Button } from "@mui/material";
 import ForwardIcon from '@mui/icons-material/ArrowForwardRounded';
 import BackIcon from '@mui/icons-material/ArrowBackRounded';
 import Meal from "../Meal/Meal";

@@ -1,21 +1,21 @@
-import axios from 'axios'
+import axiosInstance from './axiosInstance'
 import { User } from '../models/User'
 
 export default class UserServer {
     static addUser(newUser: User) {
-        return axios.post("/register", { newUser })
+        return axiosInstance.post("/register", { newUser })
             .then(response => response)
             .catch(err => err.message)
     }
 
     static getUserById(id:number) {
-        return axios.get(`/user/${id}`)
+        return axiosInstance.get(`/user/${id}`)
             .then(response => response.data.user)
             .catch(err => err.message)
     }
 
     static login(mail:string, password: string ) {
-        return axios.post("/login", { mail, password })
+        return axiosInstance.post("/login", { mail, password })
             .then(response => response)
             .catch(err => err.message)
     }
