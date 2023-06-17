@@ -163,15 +163,19 @@ const MealPage: React.FC = () => {
         let mealNameSideDish = sideDish.name.split("-").join(" ");
         MealServer.getRecepies(mealNameMainDish).then((recepiesData)=>{
             
+            if(Array.isArray(recepiesData)){
             recepiesData.map((rec:MealRecepie) => {rec.strYoutube = rec.strYoutube.replace("https://www.youtube.com/watch?v=","https://www.youtube.com/embed/")
             return rec});
-            setData(recepiesData)
+                setData(recepiesData)
+            }
         })
         MealServer.getRecepies(mealNameSideDish).then((recepiesDataSide)=>{
             
+            if(Array.isArray(recepiesDataSide)){
             recepiesDataSide.map((rec:MealRecepie) => {rec.strYoutube = rec.strYoutube.replace("https://www.youtube.com/watch?v=","https://www.youtube.com/embed/")
             return rec});
-            setDataSide(recepiesDataSide)
+                setDataSide(recepiesDataSide)
+            }
         })
       }, []);
     return (
@@ -186,7 +190,7 @@ const MealPage: React.FC = () => {
                     </div>
                 </Card>
                 
-            {data && data.length > 0 && data.map((recepieInfo) => 
+            {Array.isArray(data) && data.length > 0 && data.map((recepieInfo) => 
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">{recepieInfo.strMeal}</AccordionSummary>
                 <AccordionDetails>
@@ -199,26 +203,26 @@ const MealPage: React.FC = () => {
                     <h1>Ingredients</h1>
                 </div>
                     <FormGroup>
-                    {recepieInfo.strIngredient1.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient1 + ' - ' + recepieInfo.strMeasure1}></FormControlLabel>}
-                        {recepieInfo.strIngredient2.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient2 + ' - ' + recepieInfo.strMeasure2}></FormControlLabel>}
-                        {recepieInfo.strIngredient3.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient3 + ' - ' + recepieInfo.strMeasure3}></FormControlLabel>}
-                        {recepieInfo.strIngredient4.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient4 + ' - ' + recepieInfo.strMeasure4}></FormControlLabel>}
-                        {recepieInfo.strIngredient5.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient5 + ' - ' + recepieInfo.strMeasure5}></FormControlLabel>}
-                        {recepieInfo.strIngredient6.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient6 + ' - ' + recepieInfo.strMeasure6}></FormControlLabel>}
-                        {recepieInfo.strIngredient7.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient7 + ' - ' + recepieInfo.strMeasure7}></FormControlLabel>}
-                        {recepieInfo.strIngredient8.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient8 + ' - ' + recepieInfo.strMeasure8}></FormControlLabel>}
-                        {recepieInfo.strIngredient9.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient9 + ' - ' + recepieInfo.strMeasure9}></FormControlLabel>}
-                        {recepieInfo.strIngredient10.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient10 + ' - ' + recepieInfo.strMeasure10}></FormControlLabel>}
-                        {recepieInfo.strIngredient11.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient11 + ' - ' + recepieInfo.strMeasure11}></FormControlLabel>}
-                        {recepieInfo.strIngredient12.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient12 + ' - ' + recepieInfo.strMeasure12}></FormControlLabel>}
-                        {recepieInfo.strIngredient13.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient13 + ' - ' + recepieInfo.strMeasure13}></FormControlLabel>}
-                        {recepieInfo.strIngredient14.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient14 + ' - ' + recepieInfo.strMeasure14}></FormControlLabel>}
-                        {recepieInfo.strIngredient15.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient15 + ' - ' + recepieInfo.strMeasure15}></FormControlLabel>}
-                        {recepieInfo.strIngredient16.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient16 + ' - ' + recepieInfo.strMeasure16}></FormControlLabel>}
-                        {recepieInfo.strIngredient17.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient17 + ' - ' + recepieInfo.strMeasure17}></FormControlLabel>}
-                        {recepieInfo.strIngredient18.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient18 + ' - ' + recepieInfo.strMeasure18}></FormControlLabel>}
-                        {recepieInfo.strIngredient19.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient19 + ' - ' + recepieInfo.strMeasure19}></FormControlLabel>}
-                        {recepieInfo.strIngredient20.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient20 + ' - ' + recepieInfo.strMeasure20}></FormControlLabel>}
+                        {recepieInfo.strIngredient1 != null && recepieInfo.strIngredient1.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient1 + ' - ' + recepieInfo.strMeasure1}></FormControlLabel>}
+                        {recepieInfo.strIngredient2 != null && recepieInfo.strIngredient2.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient2 + ' - ' + recepieInfo.strMeasure2}></FormControlLabel>}
+                        {recepieInfo.strIngredient3 != null && recepieInfo.strIngredient3.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient3 + ' - ' + recepieInfo.strMeasure3}></FormControlLabel>}
+                        {recepieInfo.strIngredient4 != null && recepieInfo.strIngredient4.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient4 + ' - ' + recepieInfo.strMeasure4}></FormControlLabel>}
+                        {recepieInfo.strIngredient5 != null && recepieInfo.strIngredient5.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient5 + ' - ' + recepieInfo.strMeasure5}></FormControlLabel>}
+                        {recepieInfo.strIngredient6 != null && recepieInfo.strIngredient6.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient6 + ' - ' + recepieInfo.strMeasure6}></FormControlLabel>}
+                        {recepieInfo.strIngredient7 != null && recepieInfo.strIngredient7.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient7 + ' - ' + recepieInfo.strMeasure7}></FormControlLabel>}
+                        {recepieInfo.strIngredient8 != null && recepieInfo.strIngredient8.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient8 + ' - ' + recepieInfo.strMeasure8}></FormControlLabel>}
+                        {recepieInfo.strIngredient9 != null && recepieInfo.strIngredient9.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient9 + ' - ' + recepieInfo.strMeasure9}></FormControlLabel>}
+                        {recepieInfo.strIngredient10 != null && recepieInfo.strIngredient10.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient10 + ' - ' + recepieInfo.strMeasure10}></FormControlLabel>}
+                        {recepieInfo.strIngredient11 != null && recepieInfo.strIngredient11.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient11 + ' - ' + recepieInfo.strMeasure11}></FormControlLabel>}
+                        {recepieInfo.strIngredient12 != null && recepieInfo.strIngredient12.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient12 + ' - ' + recepieInfo.strMeasure12}></FormControlLabel>}
+                        {recepieInfo.strIngredient13 != null && recepieInfo.strIngredient13.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient13 + ' - ' + recepieInfo.strMeasure13}></FormControlLabel>}
+                        {recepieInfo.strIngredient14 != null && recepieInfo.strIngredient14.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient14 + ' - ' + recepieInfo.strMeasure14}></FormControlLabel>}
+                        {recepieInfo.strIngredient15 != null && recepieInfo.strIngredient15.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient15 + ' - ' + recepieInfo.strMeasure15}></FormControlLabel>}
+                        {recepieInfo.strIngredient16 != null && recepieInfo.strIngredient16.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient16 + ' - ' + recepieInfo.strMeasure16}></FormControlLabel>}
+                        {recepieInfo.strIngredient17 != null && recepieInfo.strIngredient17.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient17 + ' - ' + recepieInfo.strMeasure17}></FormControlLabel>}
+                        {recepieInfo.strIngredient18 != null && recepieInfo.strIngredient18.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient18 + ' - ' + recepieInfo.strMeasure18}></FormControlLabel>}
+                        {recepieInfo.strIngredient19 != null && recepieInfo.strIngredient19.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient19 + ' - ' + recepieInfo.strMeasure19}></FormControlLabel>}
+                        {recepieInfo.strIngredient20 != null && recepieInfo.strIngredient20.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient20 + ' - ' + recepieInfo.strMeasure20}></FormControlLabel>}
                     
                     </FormGroup>
                     <Divider></Divider>
@@ -247,7 +251,7 @@ const MealPage: React.FC = () => {
                     {/* <CardMedia component="img" height="140" image="Ayam-Percik.jpg" title="green iguana"/> */}
                 </Card>
                 
-            {dataSide && dataSide.length > 0 && dataSide.map((recepieInfo) => 
+            {Array.isArray(dataSide) && dataSide.length > 0 && dataSide.map((recepieInfo) => 
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">{recepieInfo.strMeal}</AccordionSummary>
                 <AccordionDetails>
@@ -260,26 +264,26 @@ const MealPage: React.FC = () => {
                     <h1>Ingredient</h1>
                     </div>
                     <FormGroup>
-                    {recepieInfo.strIngredient1.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient1 + ' - ' + recepieInfo.strMeasure1}></FormControlLabel>}
-                        {recepieInfo.strIngredient2.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient2 + ' - ' + recepieInfo.strMeasure2}></FormControlLabel>}
-                        {recepieInfo.strIngredient3.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient3 + ' - ' + recepieInfo.strMeasure3}></FormControlLabel>}
-                        {recepieInfo.strIngredient4.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient4 + ' - ' + recepieInfo.strMeasure4}></FormControlLabel>}
-                        {recepieInfo.strIngredient5.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient5 + ' - ' + recepieInfo.strMeasure5}></FormControlLabel>}
-                        {recepieInfo.strIngredient6.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient6 + ' - ' + recepieInfo.strMeasure6}></FormControlLabel>}
-                        {recepieInfo.strIngredient7.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient7 + ' - ' + recepieInfo.strMeasure7}></FormControlLabel>}
-                        {recepieInfo.strIngredient8.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient8 + ' - ' + recepieInfo.strMeasure8}></FormControlLabel>}
-                        {recepieInfo.strIngredient9.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient9 + ' - ' + recepieInfo.strMeasure9}></FormControlLabel>}
-                        {recepieInfo.strIngredient10.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient10 + ' - ' + recepieInfo.strMeasure10}></FormControlLabel>}
-                        {recepieInfo.strIngredient11.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient11 + ' - ' + recepieInfo.strMeasure11}></FormControlLabel>}
-                        {recepieInfo.strIngredient12.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient12 + ' - ' + recepieInfo.strMeasure12}></FormControlLabel>}
-                        {recepieInfo.strIngredient13.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient13 + ' - ' + recepieInfo.strMeasure13}></FormControlLabel>}
-                        {recepieInfo.strIngredient14.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient14 + ' - ' + recepieInfo.strMeasure14}></FormControlLabel>}
-                        {recepieInfo.strIngredient15.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient15 + ' - ' + recepieInfo.strMeasure15}></FormControlLabel>}
-                        {recepieInfo.strIngredient16.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient16 + ' - ' + recepieInfo.strMeasure16}></FormControlLabel>}
-                        {recepieInfo.strIngredient17.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient17 + ' - ' + recepieInfo.strMeasure17}></FormControlLabel>}
-                        {recepieInfo.strIngredient18.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient18 + ' - ' + recepieInfo.strMeasure18}></FormControlLabel>}
-                        {recepieInfo.strIngredient19.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient19 + ' - ' + recepieInfo.strMeasure19}></FormControlLabel>}
-                        {recepieInfo.strIngredient20.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient20 + ' - ' + recepieInfo.strMeasure20}></FormControlLabel>}
+                        {recepieInfo.strIngredient1 != null && recepieInfo.strIngredient1.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient1 + ' - ' + recepieInfo.strMeasure1}></FormControlLabel>}
+                        {recepieInfo.strIngredient2 != null && recepieInfo.strIngredient2.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient2 + ' - ' + recepieInfo.strMeasure2}></FormControlLabel>}
+                        {recepieInfo.strIngredient3 != null && recepieInfo.strIngredient3.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient3 + ' - ' + recepieInfo.strMeasure3}></FormControlLabel>}
+                        {recepieInfo.strIngredient4 != null &&recepieInfo.strIngredient4.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient4 + ' - ' + recepieInfo.strMeasure4}></FormControlLabel>}
+                        {recepieInfo.strIngredient5 != null && recepieInfo.strIngredient5.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient5 + ' - ' + recepieInfo.strMeasure5}></FormControlLabel>}
+                        {recepieInfo.strIngredient6 != null && recepieInfo.strIngredient6.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient6 + ' - ' + recepieInfo.strMeasure6}></FormControlLabel>}
+                        {recepieInfo.strIngredient7 != null && recepieInfo.strIngredient7.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient7 + ' - ' + recepieInfo.strMeasure7}></FormControlLabel>}
+                        {recepieInfo.strIngredient8 != null && recepieInfo.strIngredient8.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient8 + ' - ' + recepieInfo.strMeasure8}></FormControlLabel>}
+                        {recepieInfo.strIngredient9 != null && recepieInfo.strIngredient9.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient9 + ' - ' + recepieInfo.strMeasure9}></FormControlLabel>}
+                        {recepieInfo.strIngredient10 != null && recepieInfo.strIngredient10.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient10 + ' - ' + recepieInfo.strMeasure10}></FormControlLabel>}
+                        {recepieInfo.strIngredient11 != null && recepieInfo.strIngredient11.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient11 + ' - ' + recepieInfo.strMeasure11}></FormControlLabel>}
+                        {recepieInfo.strIngredient12 != null && recepieInfo.strIngredient12.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient12 + ' - ' + recepieInfo.strMeasure12}></FormControlLabel>}
+                        {recepieInfo.strIngredient13 != null && recepieInfo.strIngredient13.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient13 + ' - ' + recepieInfo.strMeasure13}></FormControlLabel>}
+                        {recepieInfo.strIngredient14 != null && recepieInfo.strIngredient14.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient14 + ' - ' + recepieInfo.strMeasure14}></FormControlLabel>}
+                        {recepieInfo.strIngredient15 != null && recepieInfo.strIngredient15.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient15 + ' - ' + recepieInfo.strMeasure15}></FormControlLabel>}
+                        {recepieInfo.strIngredient16 != null && recepieInfo.strIngredient16.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient16 + ' - ' + recepieInfo.strMeasure16}></FormControlLabel>}
+                        {recepieInfo.strIngredient17 != null && recepieInfo.strIngredient17.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient17 + ' - ' + recepieInfo.strMeasure17}></FormControlLabel>}
+                        {recepieInfo.strIngredient18 != null && recepieInfo.strIngredient18.length > 0 &&<FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient18 + ' - ' + recepieInfo.strMeasure18}></FormControlLabel>}
+                        {recepieInfo.strIngredient19 != null && recepieInfo.strIngredient19.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient19 + ' - ' + recepieInfo.strMeasure19}></FormControlLabel>}
+                        {recepieInfo.strIngredient20 != null && recepieInfo.strIngredient20.length > 0 && <FormControlLabel control={<Checkbox/>} label={recepieInfo.strIngredient20 + ' - ' + recepieInfo.strMeasure20}></FormControlLabel>}
                     
                     </FormGroup>
                     <Divider></Divider>

@@ -168,8 +168,8 @@ const Home: React.FC = () => {
       <h2 className="titleCuisine">Most loved</h2>
       <Stack direction="row" spacing={2}>
 
-        {activeNumber > 0 && <IconButton color="primary" onClick={moveBack}><BackIcon /></IconButton >}
-        {activeNumber < topMeals.length -3 && <IconButton color="primary" onClick={moveFowared}><ForwardIcon /></IconButton>}
+        {activeNumber > 0 && <IconButton color="primary" onClick={() => {moveBack(-1)}}><BackIcon /></IconButton >}
+        {activeNumber < topMeals.length -3 && <IconButton color="primary" onClick={() =>{moveFowared(-1)}}><ForwardIcon /></IconButton>}
         <Button color="primary" variant="text" onClick={showAll}>More</Button>
       </Stack>
       <Grid className="mealCardCategory" container justifyContent="center" spacing={2} sx={{ overflow: "auto", height: "85vh" }}>
