@@ -30,29 +30,29 @@ const Preffernce = () => {
       {
         setCuisines(cuisinesData);
       }
-      mealCategoryServer.getMealCategory().then((mealCategoriesData) =>
+    })
+    mealCategoryServer.getMealCategory().then((mealCategoriesData) =>
+    {
+      if(Array.isArray(mealCategoriesData))
       {
-        if(Array.isArray(mealCategoriesData))
+        setMealCategories(mealCategoriesData);
+      }
+    });
+    dishCategoryServer.getDishCategory().then((dishCategoriesData) =>
+    {
+      if(Array.isArray(dishCategoriesData))
+      {
+        setDishCategories(dishCategoriesData)
+      }
+
+    });
+    UserPreferenceServer.getUserPreference(currentUser.id!).then((UserPreferenceData) => 
+    {
+        if(!UserPreferenceData)
         {
-          setMealCategories(mealCategoriesData);
+          return;
         }
-        
-        dishCategoryServer.getDishCategory().then((dishCategoriesData) =>
-        {
-          if(Array.isArray(dishCategoriesData))
-          {
-            setDishCategories(dishCategoriesData)
-          }
-          UserPreferenceServer.getUserPreference(currentUser.id!).then((UserPreferenceData) => 
-          {
-              if(!UserPreferenceData)
-              {
-                return;
-              }
-              setUserPreffernce(UserPreferenceData)
-          })
-        });
-      });
+        setUserPreffernce(UserPreferenceData)
     })
   }, []);
 

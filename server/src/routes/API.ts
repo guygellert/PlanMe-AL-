@@ -154,7 +154,7 @@ router.get('/dishes/modify/:letter', async (req: Request, res: Response) => {
 
 router.get('/meals/insert/:side', async (req: Request, res: Response) => {
     const {side} = req.params
-    const sideOptions = ["side","Deserts","Starters"];
+    const sideOptions = ["side","Dessert","Starters"];
     if(sideOptions.indexOf(side) < 0){
         res.send("Insert Side Category");
         return;
