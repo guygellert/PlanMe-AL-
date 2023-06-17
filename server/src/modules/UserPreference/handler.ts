@@ -33,7 +33,6 @@ export const updateUserPreference = async (req: Request, res: Response) => {
 
 export const getUserPreference = async (req: Request, res: Response) => {
     try {
-        console.log(req.params.id);
         const userPreference = await getUserPreferenceById(Number(req.params.id));
         if(userPreference)
         {

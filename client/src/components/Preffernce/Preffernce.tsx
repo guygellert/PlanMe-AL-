@@ -1,6 +1,6 @@
-// import React from "react"
-import React, { useState,useEffect } from "react"
-import { Button,CardHeader,Card,CardContent,CardActions,Autocomplete,TextField,RadioGroup,Radio,FormControlLabel,FormControl,FormLabel,Grid  } from '@mui/material'
+import React from "react"
+import Swal from 'sweetalert2'
+import { Button,CardHeader,Card,CardContent,CardActions,Autocomplete,TextField,RadioGroup,Radio,FormControlLabel,FormControl,FormLabel,Grid, CircularProgress  } from '@mui/material'
 import cuisineServer from "../../serverAPI/cuisine"
 import mealCategoryServer from "../../serverAPI/mealCategory"
 import dishCategoryServer from "../../serverAPI/dishCategory"
@@ -12,49 +12,34 @@ import { User } from "../../models/User"
 import { MealCategory } from "../../models/MealCategory"
 import { DishCategory } from "../../models/DishCategory"
 import { UserPreferences } from "../../models/UserPreferences"
+import { useQuery, useQueryClient } from "react-query"
+import { Updater } from "react-query/types/core/utils"
 
 
 const Preffernce = () => {
-  const currentUser = jwtDecode<User>(localStorage.getItem('token')|| "");
-  const [cuisines, setCuisines] = useState<Cuisine[]>([]);
-  const [mealCategories, setMealCategories] = useState<MealCategory[]>([]);
-  const [mealCategoriesSign, setMealCategoriesSign] = useState<MealCategory[]>([]);
-  const [dishCategories, setDishCategories] = useState<DishCategory[]>([]);
-  const [userPreffernce, setUserPreffernce] = useState<UserPreferences>({id: 0, user: currentUser, cuisines:[], dishCategories:[], mealCategories:[]});
+  const queryClient = useQueryClient();
 
-  useEffect(() => 
-  {
-    cuisineServer.getCuisines().then((cuisinesData) =>
-    {
-      if(Array.isArray(cuisinesData))
-      {
-        setCuisines(cuisinesData);
-      }
-      mealCategoryServer.getMealCategory().then((mealCategoriesData) =>
-      {
-        if(Array.isArray(mealCategoriesData))
-        {
-          setMealCategories(mealCategoriesData);
-        }
-        
-        dishCategoryServer.getDishCategory().then((dishCategoriesData) =>
-        {
-          if(Array.isArray(dishCategoriesData))
-          {
-            setDishCategories(dishCategoriesData)
-          }
-          UserPreferenceServer.getUserPreference(currentUser.id!).then((UserPreferenceData) => 
-          {
-              if(!UserPreferenceData)
-              {
-                return;
-              }
-              setUserPreffernce(UserPreferenceData)
-          })
-        });
-      });
-    })
-  }, []);
+  const currentUser = jwtDecode<User>(localStorage.getItem('token')|| "");
+
+  const { 
+    isLoading: isLoadingCuisines,
+    data: cuisines
+  } = useQuery<Cuisine[]>('cuisines-preferencePage', cuisineServer.getCuisines);
+
+  const { 
+    isLoading: isLoadingMealCategories,
+    data: mealCategories
+  } = useQuery<MealCategory[]>('mealCategories-preferencePage', mealCategoryServer.getMealCategory);
+
+  const { 
+    isLoading: isLoadingDishCategories,
+    data: dishCategories
+  } = useQuery<DishCategory[]>('dishCategories-preferencePage', dishCategoryServer.getDishCategory);
+
+  const { 
+    isLoading: isLoadingUserPreffernce,
+    data: userPreffernce
+  } = useQuery<UserPreferences>('userPreffernce-preferencePage', () => UserPreferenceServer.getUserPreference(currentUser.id!));
 
 const extractValue = (value:string) => 
 {
@@ -70,7 +55,7 @@ handleValueChange = (field: keyof(UserPreferences),idSelect:number = -1) => (eve
   event.preventDefault();
   let booleanValue = value;
   
-  if(field == 'mealCategories' && userPreffernce.mealCategories)
+  if(field == 'mealCategories' && userPreffernce?.mealCategories)
   {
     let mealCatPref:MealCategory = {id:-1,description:""};
     mealCatPref.id = idSelect;
@@ -79,19 +64,23 @@ handleValueChange = (field: keyof(UserPreferences),idSelect:number = -1) => (eve
     {
       value.push(mealCatPref);
     }
-    else if(value.findIndex((v:any) => { return v.id != idSelect } ) >= 0)
+    else if(value.findIndex((v:any) => { return v.id !== idSelect } ) >= 0)
     {
-       value = value.filter((val:any) => { return val.id != idSelect})
+       value = value.filter((val:any) => { return val.id !== idSelect})
     }
   }
 
-  setUserPreffernce(prev => ({
-      ...prev,
-      [field]: value
-  }))
+  queryClient.setQueryData<Updater<UserPreferences, UserPreferences>>('userPreffernce-preferencePage', (prev: UserPreferences) => {
+    return ({ ...prev, [field]: value})
+  });
+  
 }       
 const handleSave = async () => {
-  UserPreferenceServer.updateUserPreference(userPreffernce);
+  UserPreferenceServer.updateUserPreference(userPreffernce!).then(() => Swal.fire(
+    'Preferences has been updated successfuly!',
+    'Thanks for the update!',
+    'success'
+  ));
 
 }
 const noValue = (idValue:number) =>
@@ -115,7 +104,7 @@ const getOptionsListCuisines = () => {
   }
   userPreffernce?.cuisines.forEach((prefCuis) =>
   {
-    currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id != prefCuis.id});
+    currentCuisinesList = currentCuisinesList?.filter((cuis) => {return cuis.id !== prefCuis.id});
   })
   return currentCuisinesList;
 }
@@ -127,74 +116,84 @@ const getOptionsListDishes = () => {
   }
   userPreffernce?.dishCategories.forEach((prefCuis) =>
   {
-    currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id != prefCuis.id});
+    currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id !== prefCuis.id});
   })
   return currentCuisinesList;
 }
-    return (
-        <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "7em" }}>
-            <Grid item xs={4}>
-        <Card>
-            <CardHeader style={{ textAlign: 'center' }} title="Preference Page"></CardHeader>
-            <CardContent>
+
+  return (
+      <Grid container justifyContent="center" spacing={2} sx={{ marginTop: "7em" }}>
+          <Grid item xs={4}>
+      <Card>
+        <CardHeader style={{ textAlign: 'center' }} title="Preference Page"></CardHeader>
+        <CardContent>
+          { 
+          isLoadingCuisines || isLoadingDishCategories || isLoadingMealCategories || isLoadingUserPreffernce ?
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <CircularProgress />
+            </div> 
+          :
+            <>
             <Autocomplete
-        multiple
-        id="tags-outlined"
-        options={getOptionsListCuisines()}
-        getOptionLabel={(option) => option.description}
-        filterSelectedOptions
-        value={userPreffernce?.cuisines || []}
-        onChange={handleValueChange("cuisines")}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder="Favorite Dishes"
-          />
-        )}
-      />
-          <Autocomplete
-        multiple
-        id="tags-outlined"
-        options={getOptionsListDishes()}
-        value={userPreffernce?.dishCategories || []}
-        onChange={handleValueChange("dishCategories")}
-        getOptionLabel={(option) => option.description}
-        filterSelectedOptions
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder="Allergens"
-          />
-        )}
-      />
-      
-    <FormControl>
-      {mealCategories && mealCategories.map((mealCategory) => 
-          <div key={mealCategory.id}>
-      <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
-        onChange={handleValueChange("mealCategories",mealCategory.id)}
-        value={returnValue(mealCategory.id)}
-        // userPreffernce.mealCategories[mealCategory.id]}
-        // defaultValue={mealCategory.id}
-      >
-        <FormControlLabel value="false"  control={<Radio />} label="No" />
-        <FormControlLabel  value="true"  control={<Radio />} label="Yes" />
-      </RadioGroup>
-      </div>
-          )}
-    </FormControl>
-            </CardContent>
-        <CardActions >
+              multiple
+              id="tags-outlined"
+              options={getOptionsListCuisines()}
+              getOptionLabel={(option) => option.description}
+              filterSelectedOptions
+              value={userPreffernce?.cuisines || []}
+              onChange={handleValueChange("cuisines")}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Favorite Dishes"
+                />
+              )}
+            />
+            <Autocomplete
+              multiple
+              id="tags-outlined"
+              options={getOptionsListDishes()}
+              value={userPreffernce?.dishCategories || []}
+              onChange={handleValueChange("dishCategories")}
+              getOptionLabel={(option) => option.description}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Allergens"
+                />
+              )}
+            />
+        
+            <FormControl>
+              {mealCategories && mealCategories.map((mealCategory) => 
+                  <div key={mealCategory.id}>
+              <FormLabel  id="demo-row-radio-buttons-group-label">{mealCategory.description}</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                onChange={handleValueChange("mealCategories",mealCategory.id)}
+                value={returnValue(mealCategory.id)}
+                // userPreffernce.mealCategories[mealCategory.id]}
+                // defaultValue={mealCategory.id}
+              >
+                <FormControlLabel value="false"  control={<Radio />} label="No" />
+                <FormControlLabel  value="true"  control={<Radio />} label="Yes" />
+              </RadioGroup>
+              </div>
+                  )}
+            </FormControl>
+            </>
+}
+      </CardContent>
+      <CardActions>
         <Button onClick={handleSave} variant="contained" color="secondary" sx={{ width: "100%" }} >Save</Button>
-        </CardActions>
-        </Card>
-        </Grid>
-        </Grid>
-    )
+      </CardActions>
+    </Card>
+  </Grid>
+  </Grid>
+  )
 }
 
 export default Preffernce;
