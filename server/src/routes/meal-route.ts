@@ -10,7 +10,7 @@ import https from 'https';
 const mealRouter = Router();
 
 mealRouter.get('/', async (req, resp) => {
-    const meal = await getTopMeals(1000);
+    const meal = await getTopMeals(2000);
 
     if (!meal) {
         resp.status(404).json({ message: 'Meal not found' });
@@ -77,7 +77,7 @@ mealRouter.get('/FilterByDesc/:desc', async (req, resp) => {
 })
 
 mealRouter.get('/top', async (req, resp) => {
-    const topMeals = await getTopMeals(1000);
+    const topMeals = await getTopMeals(2000);
     resp.json(topMeals);
 })
 mealRouter.get('/recepies/:name', async (req, res) => {
