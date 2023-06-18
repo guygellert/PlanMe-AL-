@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Chip, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography, makeStyles } from "@mui/material";
+import { Button, Chip, CircularProgress, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, Typography, makeStyles } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 import MealCategoryServer from "../../serverAPI/mealCategory";
 import { MealCategory } from "../../models/MealCategory";
 import jwtDecode from "jwt-decode";
@@ -11,6 +12,7 @@ import { UserPreferences } from "../../models/UserPreferences";
 import { Cuisine } from "../../models/Cuisine";
 import { DishCategory } from "../../models/DishCategory";
 import { styled } from '@mui/material/styles';
+import { Link } from "react-router-dom";
 const backgroungImage = require("./fastFoodBackground.jpg");
 
 const Content = styled('div')({
@@ -58,7 +60,7 @@ const Profile: React.FC = (): JSX.Element => {
 
     return (
         <Content>
-            <Container>
+            <Container sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography sx={{ fontSize: 40, marginBottom: 5 }}>{`${userData.firstName} ${userData.lastName}`}</Typography>
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: 10}}>
                     <Typography sx={{ fontSize: 17, fontFamily: "sans-serif", marginRight: 2}}> Favorite Cuisines: </Typography>
@@ -102,16 +104,22 @@ const Profile: React.FC = (): JSX.Element => {
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
                                 defaultValue="no"
+                                aria-disabled="true"
                                 value={userPreferences?.mealCategories?.find((userMealCategory: MealCategory) => 
                                     userMealCategory.id === mealCategory.id) ? "yes" : "no"}
                             >
-                                <FormControlLabel value="no" control={<Radio />} label="No" />
-                                <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+                                <FormControlLabel disabled={true} value="no" control={<Radio />} label="No" />
+                                <FormControlLabel disabled={true} value="yes" control={<Radio />} label="Yes" />
                             </RadioGroup>
                         </div>
                         )
                     }
                 </FormControl>
+                <Link to='/pref'>
+                    <Button variant="contained" style={{width: '20%', marginTop: '30px'}} color='secondary' endIcon={<SendIcon />}>
+                        Upadte Preferences
+                    </Button>
+                </Link>
             </Container>
         </Content>
     )
