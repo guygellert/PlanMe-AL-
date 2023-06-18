@@ -53,23 +53,28 @@ const extractValue = (value:string) =>
 const 
 handleValueChange = (field: keyof(UserPreferences),idSelect:number = -1) => (event: React.SyntheticEvent<Element, Event>,value:any) => {
   event.preventDefault();
-  let booleanValue = value;
-  
-  if(field == 'mealCategories' && userPreffernce?.mealCategories)
+  let booleanValue = value;  
+  if(field == 'mealCategories')
   {
     let mealCatPref:MealCategory = {id:-1,description:""};
     mealCatPref.id = idSelect;
-    value = userPreffernce.mealCategories;
+    value = [];
+    if(Array.isArray(userPreffernce.mealCategories)){
+      value = userPreffernce.mealCategories;
+    }
+    console.log(value)
     if(booleanValue == "true")
     {
       value.push(mealCatPref);
     }
-    else if(value.findIndex((v:any) => { return v.id !== idSelect } ) >= 0)
+    else 
+    // if(value.findIndex((v:any) => { return v.id !== idSelect } ) >= 0)
     {
        value = value.filter((val:any) => { return val.id !== idSelect})
     }
   }
 
+  console.log(userPreffernce)
   queryClient.setQueryData<Updater<UserPreferences, UserPreferences>>('userPreffernce-preferencePage', (prev: UserPreferences) => {
     return ({ ...prev, [field]: value})
   });
@@ -90,18 +95,18 @@ const noValue = (idValue:number) =>
 
 const returnValue = (idFind:number) => 
 {
-  if(userPreffernce instanceof Object == false){
-    return []
-  }
-  let booleanValue =  userPreffernce.mealCategories.findIndex((prefMealCat) => {return prefMealCat.id == idFind}) >= 0;
+  if(userPreffernce && Array.isArray(userPreffernce.mealCategories)){
+  let booleanValue = userPreffernce.mealCategories.findIndex((prefMealCat) => {return prefMealCat.id == idFind}) >= 0;
   return booleanValue;
+  }
+  return false;
 }
 const getOptionsListCuisines = () => {
   let currentCuisinesList = cuisines;
-  if(userPreffernce instanceof Object == false){
-    return []
-  }
-  userPreffernce?.cuisines.forEach((prefCuis) =>
+  // if(userPreffernce instanceof Object == false){
+  //   return []
+  // }
+  userPreffernce?.cuisines?.forEach((prefCuis) =>
   {
     currentCuisinesList = currentCuisinesList?.filter((cuis) => {return cuis.id !== prefCuis.id});
   })
@@ -110,10 +115,7 @@ const getOptionsListCuisines = () => {
 
 const getOptionsListDishes = () => {
   let currentCuisinesList = dishCategories;
-  if(userPreffernce instanceof Object == false){
-    return []
-  }
-  userPreffernce?.dishCategories.forEach((prefCuis) =>
+  userPreffernce?.dishCategories?.forEach((prefCuis) =>
   {
     currentCuisinesList = currentCuisinesList.filter((cuis) => {return cuis.id !== prefCuis.id});
   })

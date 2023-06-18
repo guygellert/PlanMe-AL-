@@ -12,13 +12,14 @@ import { UserPreference } from "../../entities/UserPreference"
 import { getUserPreferenceById, updateNewUserPreference} from "../../bl/user-preference-bl";
 export const updateUserPreference = async (req: Request, res: Response) => {
     try {
+        
         // let stuff = jwt.decode(req.body.newUserPreference.User.token)
         const user = await AppDataSource.getRepository(User).findOne({ where: { id: req.user.id} })
         let newUserPreferenceReq = req.body.newUserPreference;
-        newUserPreferenceReq.User = user;
+        newUserPreferenceReq.user = user;
+        console.log(newUserPreferenceReq)
         const userPreference = await updateNewUserPreference(newUserPreferenceReq,req.user.id);
         // await Service.updateUserPreference(newUserPreferenceReq)
-
         if (userPreference) {
             return res.status(httpStatus.OK).send({userPreference: userPreference })
         }
@@ -30,12 +31,12 @@ export const updateUserPreference = async (req: Request, res: Response) => {
 
 export const getUserPreference = async (req: Request, res: Response) => {
     try {
-        const userPreference = await getUserPreferenceById(Number(req.params.id));
-        if(userPreference)
-        {
+        const userPreference = await getUserPreferenceById(Number(req.user.id));
+        // if(userPreference)
+        // {
             return res.status(httpStatus.OK).send({ userPreference: userPreference });
-        }
-        return res.status(httpStatus.NOT_FOUND).send({ userPreference: userPreference });
+        // }
+        // return res.status(httpStatus.NOT_FOUND).send({ userPreference: userPreference });
             
         } catch (err) {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err)

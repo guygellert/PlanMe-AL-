@@ -10,7 +10,10 @@ export default class UserPreferenceServer {
 
     static getUserPreference(userId: number) {
         return axiosInstance.get(`/userPreference/${userId}`)
-            .then(response => response.data.userPreference)
+            .then((response) => {
+                console.log(response)
+                return (response.data.userPreference)? response.data.userPreference:[]
+            } )
             .catch(err => err.message)
     }
 }
