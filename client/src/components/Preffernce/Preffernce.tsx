@@ -161,7 +161,7 @@ const getOptionsListDishes = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Sensitivities"
+                  placeholder="Dishes types"
                 />
               )}
             />
