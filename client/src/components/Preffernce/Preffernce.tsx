@@ -146,7 +146,7 @@ const getOptionsListDishes = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Favorite Dishes"
+                  placeholder="Favorite cuisines"
                 />
               )}
             />
@@ -161,7 +161,7 @@ const getOptionsListDishes = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Allergens"
+                  placeholder="Dishes types"
                 />
               )}
             />

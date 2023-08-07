@@ -78,7 +78,7 @@ const Profile: React.FC = (): JSX.Element => {
                     }
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', marginTop: 10}}>
-                    <Typography sx={{ fontSize: 17, fontFamily: "sans-serif", marginRight: 2, marginBottom: 5, marginTop: 5}}>Allergies: </Typography>
+                    <Typography sx={{ fontSize: 17, fontFamily: "sans-serif", marginRight: 2, marginBottom: 5, marginTop: 5}}>Dishes types: </Typography>
                     {
                         userPreferences?.dishCategories && userPreferences?.dishCategories.length > 0 ? 
                         <Stack direction="row" spacing={1}>
