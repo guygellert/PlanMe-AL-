@@ -97,10 +97,6 @@ const getMealsByUserPreference = async (userId: number, description: string) => 
         .leftJoinAndSelect('sideDish.cuisines', 'cuisinesSide')
         .where('LOWER(mainDish.name) LIKE :description', { description:`%${description}%` })
     
-        // if(mealCategories?.length){
-        //     mealsBysearchQuery = mealsBysearchQuery
-        //     .andWhere('MealCategories.id IN (:...MealCategoriesIds)', { MealCategoriesIds: mealCategories })   
-        // }
 
         mealsBysearchQuery = mealsBysearchQuery.orWhere('LOWER(sideDish.name) LIKE :description', { description:`%${description}%` })
         .orWhere('LOWER(sideDish.description) LIKE :description', { description:`%${description}%` })
