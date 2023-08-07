@@ -14,9 +14,9 @@ beforeEach(() => {
   });
 
 
-//   test('Getting all cuisines', () => {
-//     getAllCuisine().then(data => expect(data.length).toBeGreaterThan(0));
-//   })
+  test('Getting all cuisines', () => {
+    getAllCuisine().then(data => expect(data.length).toBeGreaterThan(0));
+  })
 
 
   test('Getting all dishes', () => {
