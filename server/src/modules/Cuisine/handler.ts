@@ -8,7 +8,7 @@ export const createCuisine = async (req: Request, res: Response) => {
         const cuisineExists = await AppDataSource.getRepository(Cuisine).findOne({ where: { description: req.body.description } })
 
         if (cuisineExists !== null)
-            return res.status(httpStatus.OK).send({ message: "Cuisine already exists" })
+            return res.status(httpStatus.ALREADY_REPORTED).send({ message: "Cuisine already exists" })
 
         const cuisine = await Service.createCuisine(req.body.description);
 
